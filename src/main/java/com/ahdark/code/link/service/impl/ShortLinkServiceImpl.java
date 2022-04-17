@@ -6,9 +6,7 @@ import com.ahdark.code.link.service.ShortLinkService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ShortLinkServiceImpl implements ShortLinkService {
@@ -16,27 +14,30 @@ public class ShortLinkServiceImpl implements ShortLinkService {
     private ShortLinkMapper shortLinkMapper;
 
     @Override
-    public List<ShortLink> getShortLinks(String key) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("key", key);
-        return this.shortLinkMapper.getShortLinks(paramMap);
+    public List<ShortLink> getShortLinkByKey(String key) {
+        ShortLink shortLink = new ShortLink();
+        shortLink.setKey(key);
+        return this.shortLinkMapper.getShortLinkByKey(shortLink);
+    }
+
+    @Override
+    public List<ShortLink> getShortLinkByUrl(String url) {
+        ShortLink shortLink = new ShortLink();
+        shortLink.setOrigin(url);
+        return this.shortLinkMapper.getShortLinksByUrl(shortLink);
     }
 
     @Override
     public List<ShortLink> getShortLinksById(int userId) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("userId", userId);
-        return this.shortLinkMapper.getShortLinksById(paramMap);
+        ShortLink shortLink = new ShortLink();
+        shortLink.setUser_id(userId);
+        return this.shortLinkMapper.getShortLinksByUserId(shortLink);
     }
 
     @Override
     public Boolean setShortLinks(ShortLink shortLinks) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("key", shortLinks.getKey());
-        paramMap.put("origin", shortLinks.getOrigin());
-        paramMap.put("user_id", shortLinks.getUser_id());
-        List<Map<String, Object>> result = this.shortLinkMapper.setShortLinks(paramMap);
-        return !result.isEmpty();
+        int result = this.shortLinkMapper.setShortLinks(shortLinks);
+        return result != 0;
     }
 
 }

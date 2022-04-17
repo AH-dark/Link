@@ -5,7 +5,9 @@ import com.ahdark.code.link.pojo.User;
 import java.util.List;
 
 public interface UserService {
-    List<User> getUser(String email);
+    List<User> getUserByEmail(String email);
+
+    List<User> getUserById(int id);
 
     boolean setUser(User user);
 }

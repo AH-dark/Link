@@ -7,6 +7,8 @@ import com.alibaba.fastjson.JSONObject;
 import java.io.Serializable;
 import java.util.List;
 
+import static com.ahdark.code.link.utils.CodeResult.SUCCESS;
+
 /**
  * API Result JSON Message
  *
@@ -16,12 +18,12 @@ public class ApiResult implements Serializable {
     /**
      * 返回码
      */
-    private int Code = 0; // 返回码
+    private int Code = SUCCESS.getCode(); // 返回码
 
     /**
      * 消息
      */
-    private String Message = "success";
+    private String Message = SUCCESS.getMsg();
     /**
      * 数据
      */
@@ -37,45 +39,40 @@ public class ApiResult implements Serializable {
         super();
     }
 
-    public ApiResult(int code, String message) {
+    public ApiResult(CodeResult codeResult) {
         super();
-        this.Code = code;
-        this.Message = message;
+        this.Code = codeResult.getCode();
+        this.Message = codeResult.getMsg();
     }
 
-    public ApiResult(int code, String message, JSONObject data) {
+    public ApiResult(CodeResult codeResult, JSONObject data) {
         super();
-        this.Code = code;
-        this.Message = message;
+        this.Code = codeResult.getCode();
+        this.Message = codeResult.getMsg();
         this.ObjectData = data;
     }
 
-    public ApiResult(int code, String message, JSONArray data) {
+    public ApiResult(CodeResult codeResult, JSONArray data) {
         super();
-        this.Code = code;
-        this.Message = message;
+        this.Code = codeResult.getCode();
+        this.Message = codeResult.getMsg();
         this.ListData = data;
     }
 
-    public ApiResult(int code, String message, JSONObject data, String exceptions) {
+    public ApiResult(CodeResult codeResult, JSONObject data, String exceptions) {
         super();
-        this.Code = code;
-        this.Message = message;
+        this.Code = codeResult.getCode();
+        this.Message = codeResult.getMsg();
         this.ObjectData = data;
         this.Exceptions = exceptions;
     }
 
-    public ApiResult(int code, String message, JSONArray data, String exceptions) {
+    public ApiResult(CodeResult codeResult, JSONArray data, String exceptions) {
         super();
-        this.Code = code;
-        this.Message = message;
+        this.Code = codeResult.getCode();
+        this.Message = codeResult.getMsg();
         this.ListData = data;
         this.Exceptions = exceptions;
-    }
-
-    public ApiResult(String message) {
-        super();
-        this.Message = message;
     }
 
     public ApiResult(JSONObject data) {
@@ -100,11 +97,11 @@ public class ApiResult implements Serializable {
         this.Message = message;
     }
 
-    public void setObjectData(Object objectData) {
+    public void setData(Object objectData) {
         this.ObjectData = objectData;
     }
 
-    public void setListData(List<Object> listData) {
+    public void setData(List<Object> listData) {
         ListData = listData;
     }
 
@@ -120,6 +117,9 @@ public class ApiResult implements Serializable {
             json.put("data", this.ObjectData);
         } else if (this.ListData != null) {
             json.put("data", this.ListData);
+        }
+        if (this.Exceptions != null) {
+            json.put("exceptions", this.Exceptions);
         }
         return json;
     }

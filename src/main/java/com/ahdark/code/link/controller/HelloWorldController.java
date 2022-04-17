@@ -6,11 +6,15 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.ahdark.code.link.utils.CodeResult.SUCCESS;
+
 @RestController
 @RequestMapping(path = "/api/helloWorld")
 public class HelloWorldController {
     @RequestMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public JSONObject Index() {
-        return new ApiResult("hello world").getJsonResult();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("state", "hello world");
+        return new ApiResult(SUCCESS, jsonObject).getJsonResult();
     }
 }

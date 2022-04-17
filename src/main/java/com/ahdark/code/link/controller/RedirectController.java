@@ -32,7 +32,7 @@ public class RedirectController {
 
     @RequestMapping(path = "/{key}")
     public void Redirect(@PathVariable String key) throws IOException {
-        List<ShortLink> result = shortLinkService.getShortLinks(key);
+        List<ShortLink> result = shortLinkService.getShortLinkByKey(key);
         String origin = result.get(0).getOrigin();
         response.sendRedirect(origin);
         Logger logger = LoggerFactory.getLogger(RedirectController.class);

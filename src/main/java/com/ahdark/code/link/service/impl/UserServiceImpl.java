@@ -16,10 +16,17 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public List<User> getUser(String email) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("email", email);
-        return this.userMapper.getUser(paramMap);
+    public List<User> getUserByEmail(String email) {
+        User user = new User();
+        user.setEmail(email);
+        return this.userMapper.getUserByEmail(user);
+    }
+
+    @Override
+    public List<User> getUserById(int id) {
+        User user = new User();
+        user.setId(id);
+        return this.userMapper.getUserById(user);
     }
 
     @Override
