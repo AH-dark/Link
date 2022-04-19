@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,21 +24,17 @@ import static com.ahdark.code.link.utils.CodeResult.*;
 @RestController
 @RequestMapping(path = "/api/shortLink")
 public class ShortLinkController {
-    final
-    HttpServletRequest request;
+    @Autowired
+    private HttpServletRequest request;
 
-    private final HttpServletResponse response;
+    @Autowired
+    private HttpServletResponse response;
 
-    private final ShortLinkService shortLinkService;
+    @Autowired
+    private ShortLinkService shortLinkService;
 
-    private final UserService userService;
-
-    public ShortLinkController(ShortLinkService shortLinkService, HttpServletResponse response, HttpServletRequest request, UserService userService) {
-        this.shortLinkService = shortLinkService;
-        this.response = response;
-        this.request = request;
-        this.userService = userService;
-    }
+    @Autowired
+    private UserService userService;
 
     private boolean isOriginMatch(String origin) {
         String originPattern = "^https?://([\\w-]+\\.)+[\\w-]+(/[\\w-./?%&=]*)?$";

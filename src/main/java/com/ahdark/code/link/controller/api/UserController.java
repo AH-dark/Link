@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,13 +22,13 @@ import static com.ahdark.code.link.utils.CodeResult.USER_ACCOUNT_NOT_EXIST;
 @RestController
 @RequestMapping(path = "/api/user")
 public class UserController {
-    final
+    @Autowired
     HttpServletRequest request;
 
-    final
+    @Autowired
     HttpServletResponse response;
 
-    final
+    @Autowired
     UserService userService;
 
 

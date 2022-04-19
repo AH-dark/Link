@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,19 +17,13 @@ import java.util.List;
 @Controller
 @RequestMapping(path = "/go/")
 public class RedirectController {
-    final
+    @Autowired
     HttpServletRequest request;
 
-    final
+    @Autowired
     HttpServletResponse response;
-    final
+    @Autowired
     ShortLinkService shortLinkService;
-
-    public RedirectController(HttpServletRequest request, HttpServletResponse response, ShortLinkService shortLinkService) {
-        this.request = request;
-        this.response = response;
-        this.shortLinkService = shortLinkService;
-    }
 
     @RequestMapping(path = "/{key}")
     public void Redirect(@PathVariable String key) throws IOException {
