@@ -22,16 +22,13 @@ import static com.ahdark.code.link.utils.CodeResult.USER_ACCOUNT_NOT_EXIST;
 @RestController
 @RequestMapping(path = "/api/user")
 public class UserController {
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private HttpServletRequest request;
-
     @Autowired
     private HttpServletResponse response;
-
     @Autowired
     private UserService userService;
-
-    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     public UserController(HttpServletResponse response, HttpServletRequest request, UserService userService) {
         this.response = response;

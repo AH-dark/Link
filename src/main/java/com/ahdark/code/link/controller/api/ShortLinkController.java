@@ -1,6 +1,5 @@
 package com.ahdark.code.link.controller.api;
 
-import com.ahdark.code.link.controller.RedirectController;
 import com.ahdark.code.link.pojo.ShortLink;
 import com.ahdark.code.link.pojo.User;
 import com.ahdark.code.link.service.ShortLinkService;
@@ -24,19 +23,15 @@ import static com.ahdark.code.link.utils.CodeResult.*;
 @RestController
 @RequestMapping(path = "/api/shortLink")
 public class ShortLinkController {
+    private final Logger logger = LoggerFactory.getLogger(ShortLinkController.class);
     @Autowired
     private HttpServletRequest request;
-
     @Autowired
     private HttpServletResponse response;
-
     @Autowired
     private ShortLinkService shortLinkService;
-
     @Autowired
     private UserService userService;
-
-    private final Logger logger = LoggerFactory.getLogger(ShortLinkController.class);
 
     private boolean isOriginMatch(String origin) {
         String originPattern = "^https?://([\\w-]+\\.)+[\\w-]+(/[\\w-./?%&=]*)?$";

@@ -18,19 +18,15 @@ import java.util.List;
 @Controller
 @RequestMapping(path = "/go/")
 public class RedirectController {
+    private final Logger logger = LoggerFactory.getLogger(RedirectController.class);
     @Autowired
     HttpServletRequest request;
-
     @Autowired
     HttpServletResponse response;
-
     @Autowired
     ShortLinkService shortLinkService;
-
     @Autowired
     AsyncService asyncService;
-
-    private final Logger logger = LoggerFactory.getLogger(RedirectController.class);
 
     @RequestMapping(path = "/{key}")
     public void Redirect(@PathVariable String key) throws IOException {

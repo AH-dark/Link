@@ -13,6 +13,7 @@ public interface ShortLinkMapper {
 
     /**
      * Set view ++
+     *
      * @param shortLink 参数，需要 Key
      * @return SQL执行返回值
      */
