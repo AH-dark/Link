@@ -23,14 +23,15 @@ import static com.ahdark.code.link.utils.CodeResult.USER_ACCOUNT_NOT_EXIST;
 @RequestMapping(path = "/api/user")
 public class UserController {
     @Autowired
-    HttpServletRequest request;
+    private HttpServletRequest request;
 
     @Autowired
-    HttpServletResponse response;
+    private HttpServletResponse response;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
+    private final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     public UserController(HttpServletResponse response, HttpServletRequest request, UserService userService) {
         this.response = response;
@@ -58,7 +59,7 @@ public class UserController {
 
         ApiResult result = new ApiResult(json);
 
-        Logger logger = LoggerFactory.getLogger(RedirectController.class);
+
         logger.info("API Logger, Method: %s, Uri: %s, %s".formatted(request.getMethod(), request.getRequestURI(), result.toString()));
 
         return result.getJsonResult();

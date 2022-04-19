@@ -17,21 +17,21 @@ public class ShortLinkServiceImpl implements ShortLinkService {
     public List<ShortLink> getShortLinkByKey(String key) {
         ShortLink shortLink = new ShortLink();
         shortLink.setKey(key);
-        return this.shortLinkMapper.getShortLinkByKey(shortLink);
+        return this.shortLinkMapper.getShortLink(shortLink);
     }
 
     @Override
     public List<ShortLink> getShortLinkByUrl(String url) {
         ShortLink shortLink = new ShortLink();
         shortLink.setOrigin(url);
-        return this.shortLinkMapper.getShortLinksByUrl(shortLink);
+        return this.shortLinkMapper.getShortLink(shortLink);
     }
 
     @Override
     public List<ShortLink> getShortLinksById(int userId) {
         ShortLink shortLink = new ShortLink();
         shortLink.setUser_id(userId);
-        return this.shortLinkMapper.getShortLinksByUserId(shortLink);
+        return this.shortLinkMapper.getShortLink(shortLink);
     }
 
     @Override

@@ -36,6 +36,8 @@ public class ShortLinkController {
     @Autowired
     private UserService userService;
 
+    private final Logger logger = LoggerFactory.getLogger(ShortLinkController.class);
+
     private boolean isOriginMatch(String origin) {
         String originPattern = "^https?://([\\w-]+\\.)+[\\w-]+(/[\\w-./?%&=]*)?$";
         return Pattern.matches(originPattern, origin);
@@ -64,7 +66,6 @@ public class ShortLinkController {
 
         ApiResult result = new ApiResult(json);
 
-        Logger logger = LoggerFactory.getLogger(RedirectController.class);
         logger.info("API Logger, Method: %s, Uri: %s, %s".formatted(request.getMethod(), request.getRequestURI(), result.toString()));
 
         return result.getJsonResult();
@@ -87,7 +88,6 @@ public class ShortLinkController {
 
         ApiResult result = new ApiResult(array);
 
-        Logger logger = LoggerFactory.getLogger(RedirectController.class);
         logger.info("API Logger, Method: %s, Uri: %s, %s".formatted(request.getMethod(), request.getRequestURI(), result.toString()));
 
         return result.getJsonResult();
@@ -110,7 +110,6 @@ public class ShortLinkController {
 
         ApiResult result = new ApiResult(array);
 
-        Logger logger = LoggerFactory.getLogger(RedirectController.class);
         logger.info("API Logger, Method: %s, Uri: %s, %s".formatted(request.getMethod(), request.getRequestURI(), result.toString()));
 
         return result.getJsonResult();
@@ -157,7 +156,6 @@ public class ShortLinkController {
             d.put("view", oldData.getView());
             d.put("create_time", oldData.getCreate_time());
             tmp = new ApiResult(d).getJsonResult();
-            Logger logger = LoggerFactory.getLogger(RedirectController.class);
             logger.info("API Logger, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), tmp.toString()));
             logger.warn("The request is a duplicate, returning an existing short link.");
             return tmp;
@@ -181,7 +179,6 @@ public class ShortLinkController {
             r = new ApiResult(COMMON_FAIL).getJsonResult();
         }
 
-        Logger logger = LoggerFactory.getLogger(RedirectController.class);
         logger.info("API Logger, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), r.toString()));
 
         return r;

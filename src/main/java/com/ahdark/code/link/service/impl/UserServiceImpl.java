@@ -19,14 +19,14 @@ public class UserServiceImpl implements UserService {
     public List<User> getUserByEmail(String email) {
         User user = new User();
         user.setEmail(email);
-        return this.userMapper.getUserByEmail(user);
+        return this.userMapper.getUser(user);
     }
 
     @Override
     public List<User> getUserById(int id) {
         User user = new User();
         user.setId(id);
-        return this.userMapper.getUserById(user);
+        return this.userMapper.getUser(user);
     }
 
     @Override

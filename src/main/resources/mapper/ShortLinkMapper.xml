@@ -2,30 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ahdark.code.link.dao.ShortLinkMapper">
-    <select id="getShortLinkByKey" parameterType="com.ahdark.code.link.pojo.ShortLink" resultType="com.ahdark.code.link.pojo.ShortLink">
+    <select id="getShortLink" parameterType="com.ahdark.code.link.pojo.ShortLink" resultType="com.ahdark.code.link.pojo.ShortLink">
         SELECT * FROM short_links
         <where>
             <if test='key!=null and key!=""'>
-                `key`=#{key}
+                and `key`=#{key}
             </if>
-        </where>
-    </select>
-    <select id="getShortLinksByUrl" parameterType="com.ahdark.code.link.pojo.ShortLink" resultType="com.ahdark.code.link.pojo.ShortLink">
-        SELECT * FROM short_links
-        <where>
             <if test='origin!=null and origin!=""'>
-                `origin`=#{origin}
+                and `origin`=#{origin}
+            </if>
+            <if test='user_id!=null and user_id!=0'>
+                and `user_id`=#{user_id}
             </if>
         </where>
     </select>
-    <select id="getShortLinksById" parameterType="com.ahdark.code.link.pojo.ShortLink" resultType="com.ahdark.code.link.pojo.ShortLink">
-        SELECT * FROM short_links
-        <where>
-            <if test='userId!=null and userId!=0'>
-                `user_id`=#{user_id}
-            </if>
-        </where>
-    </select>
+    <update id="addView" parameterType="com.ahdark.code.link.pojo.ShortLink">
+        UPDATE short_links SET view=view+1 WHERE `key`='${key}'
+    </update>
     <insert id="setShortLinks" parameterType="com.ahdark.code.link.pojo.ShortLink">
         INSERT INTO short_links (`key`, origin, user_id)
         VALUES (#{key},

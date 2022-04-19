@@ -9,11 +9,14 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ShortLinkMapper {
-    List<ShortLink> getShortLinkByKey(ShortLink shortLink);
+    List<ShortLink> getShortLink(ShortLink shortLink);
 
-    List<ShortLink> getShortLinksByUserId(ShortLink shortLink);
-
-    List<ShortLink> getShortLinksByUrl(ShortLink shortLink);
+    /**
+     * Set view ++
+     * @param shortLink 参数，需要 Key
+     * @return SQL执行返回值
+     */
+    int addView(ShortLink shortLink);
 
     int setShortLinks(ShortLink shortLink);
 }

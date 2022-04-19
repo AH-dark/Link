@@ -10,8 +10,7 @@ import java.util.Map;
 @Mapper
 @Repository
 public interface UserMapper {
-    List<User> getUserById(User user);
-    List<User> getUserByEmail(User user);
+    List<User> getUser(User user);
 
     List<Map<String, Object>> setUser(Map<String, Object> paramMap);
 }
