@@ -1,10 +1,12 @@
 package com.ahdark.code.link.pojo;
 
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 
 @Data
+@Component
 public class User {
     private int id;
     private String name;

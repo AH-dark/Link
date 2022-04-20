@@ -3,12 +3,16 @@ package com.ahdark.code.link.service.impl;
 import com.ahdark.code.link.dao.UserMapper;
 import com.ahdark.code.link.pojo.User;
 import com.ahdark.code.link.service.UserService;
+import com.ahdark.code.link.utils.CodeInfo;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static com.ahdark.code.link.utils.CodeInfo.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,17 +20,17 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public List<User> getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         User user = new User();
         user.setEmail(email);
-        return this.userMapper.getUser(user);
+        return this.userMapper.getUser(user).get(1);
     }
 
     @Override
-    public List<User> getUserById(int id) {
+    public User getUserById(int id) {
         User user = new User();
         user.setId(id);
-        return this.userMapper.getUser(user);
+        return this.userMapper.getUser(user).get(1);
     }
 
     @Override
@@ -36,7 +40,7 @@ public class UserServiceImpl implements UserService {
         paramMap.put("email", user.getEmail());
         paramMap.put("password", user.getPassword());
         paramMap.put("register_ip", user.getRegister_ip());
-        List<Map<String, Object>> result = this.userMapper.setUser(paramMap);
-        return !result.isEmpty();
+        int result = this.userMapper.setUser(paramMap);
+        return result!=0;
     }
 }
