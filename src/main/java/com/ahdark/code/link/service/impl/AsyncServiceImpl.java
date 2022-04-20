@@ -37,6 +37,11 @@ public class AsyncServiceImpl implements AsyncService {
     @Async
     @Override
     public void updateUserLoginTime(int id) {
-        userService.updateLoginTime(id);
+        boolean result = userService.updateLoginTime(id);
+        if (result) {
+            log.info("Update user login time succeed. ID: {}", id);
+        } else {
+            log.error("Update user login time failed. ID: {}", id);
+        }
     }
 }
