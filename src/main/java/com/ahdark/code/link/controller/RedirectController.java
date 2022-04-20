@@ -28,11 +28,20 @@ public class RedirectController {
     @Autowired
     AsyncService asyncService;
 
+    /**
+     * /go/ 短链接跳转 核心部分
+     *
+     * @param key 链接标记
+     */
     @RequestMapping(path = "/{key}")
-    public void Redirect(@PathVariable String key) throws IOException {
+    public void Redirect(@PathVariable String key) {
         List<ShortLink> result = shortLinkService.getShortLinkByKey(key);
         String origin = result.get(0).getOrigin();
-        response.sendRedirect(origin);
+        try {
+            response.sendRedirect(origin);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
 
         logger.info("Request " + request.getRequestURI() + " has been redirected to " + origin);
         asyncService.addLinkView(key);

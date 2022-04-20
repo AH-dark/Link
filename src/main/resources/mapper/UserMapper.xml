@@ -6,10 +6,13 @@
         SELECT * FROM users
         <where>
             <if test='email!=null and email!=""'>
-                `email`=#{email}
+                `email`='#{email}'
             </if>
             <if test='id!=null and id!=""'>
                 `id`=#{id}
+            </if>
+            <if test='password!=null and password!=""'>
+                `password`='#{password}'
             </if>
         </where>
     </select>

@@ -6,8 +6,8 @@ import com.ahdark.code.link.service.ShortLinkService;
 import com.ahdark.code.link.service.UserService;
 import com.ahdark.code.link.utils.ApiResult;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.ahdark.code.link.utils.CodeResult.*;
+import static com.ahdark.code.link.utils.CodeInfo.*;
 
 @RestController
 @RequestMapping(path = "/api/shortLink")
@@ -40,7 +40,7 @@ public class ShortLinkController {
 
     @GetMapping(path = "")
     public JSONObject GetWithNoParam() {
-        return new ApiResult(NO_DATA).getJsonResult();
+        return new ApiResult<>(NO_DATA).getJsonResult();
     }
 
     @GetMapping(path = "", params = {"key"})
@@ -48,18 +48,13 @@ public class ShortLinkController {
         List<ShortLink> results = shortLinkService.getShortLinkByKey(key);
         if (results.isEmpty()) {
             response.setStatus(404);
-            return new ApiResult(NO_DATA).getJsonResult();
+            return new ApiResult<>(NO_DATA).getJsonResult();
         }
 
         ShortLink data = results.get(0);
-        JSONObject json = new JSONObject();
-        json.put("key", data.getKey());
-        json.put("origin", data.getOrigin());
-        json.put("user_id", data.getUser_id());
-        json.put("view", data.getView());
-        json.put("create_time", data.getCreate_time().toString());
+        Gson gson = new Gson();
 
-        ApiResult result = new ApiResult(json);
+        ApiResult<ShortLink> result = new ApiResult<>(data);
 
         logger.info("API Logger, Method: %s, Uri: %s, %s".formatted(request.getMethod(), request.getRequestURI(), result.toString()));
 
@@ -71,17 +66,14 @@ public class ShortLinkController {
         List<ShortLink> results = shortLinkService.getShortLinksById(userId);
         if (results.isEmpty()) {
             response.setStatus(404);
-            return new ApiResult(PARAM_NOT_COMPLETE).getJsonResult();
+            return new ApiResult<>(PARAM_NOT_COMPLETE).getJsonResult();
         }
         if (userId == 0) {
             response.setStatus(403);
-            return new ApiResult(NO_PERMISSION).getJsonResult();
+            return new ApiResult<>(NO_PERMISSION).getJsonResult();
         }
 
-        JSONArray array = new JSONArray();
-        array.addAll(results);
-
-        ApiResult result = new ApiResult(array);
+        ApiResult<List<ShortLink>> result = new ApiResult<>(results);
 
         logger.info("API Logger, Method: %s, Uri: %s, %s".formatted(request.getMethod(), request.getRequestURI(), result.toString()));
 
@@ -92,18 +84,15 @@ public class ShortLinkController {
     public JSONObject GetByUrl(@RequestParam("origin") String origin) {
         if (!this.isOriginMatch(origin)) {
             response.setStatus(400);
-            return new ApiResult(PARAM_NOT_VALID).getJsonResult();
+            return new ApiResult<>(PARAM_NOT_VALID).getJsonResult();
         }
         List<ShortLink> results = shortLinkService.getShortLinkByUrl(origin);
         if (results.isEmpty()) {
             response.setStatus(404);
-            return new ApiResult(NO_DATA).getJsonResult();
+            return new ApiResult<>(NO_DATA).getJsonResult();
         }
 
-        JSONArray array = new JSONArray();
-        array.addAll(results);
-
-        ApiResult result = new ApiResult(array);
+        ApiResult<List<ShortLink>> result = new ApiResult<>(results);
 
         logger.info("API Logger, Method: %s, Uri: %s, %s".formatted(request.getMethod(), request.getRequestURI(), result.toString()));
 
@@ -120,19 +109,19 @@ public class ShortLinkController {
             shortLinks.setKey(json.getString("key"));
         } else {
             response.setStatus(400);
-            return new ApiResult(PARAM_NOT_COMPLETE).getJsonResult();
+            return new ApiResult<>(PARAM_NOT_COMPLETE).getJsonResult();
         }
 
         if (json.getString("origin") != null && isOriginMatch(json.getString("origin"))) {
             shortLinks.setOrigin(json.getString("origin"));
         } else {
-            return new ApiResult(PARAM_NOT_COMPLETE).getJsonResult();
+            return new ApiResult<>(PARAM_NOT_COMPLETE).getJsonResult();
         }
 
         if (json.getInteger("user_id") != null && json.getInteger("user_id") > 0) {
-            List<User> results = userService.getUserById(json.getInteger("user_id"));
-            if (results.isEmpty()) {
-                return new ApiResult(USER_ACCOUNT_NOT_EXIST).getJsonResult();
+            User result = userService.getUserById(json.getInteger("user_id"));
+            if (result == null) {
+                return new ApiResult<>(USER_ACCOUNT_NOT_EXIST).getJsonResult();
             }
             shortLinks.setUser_id(json.getInteger("user_id"));
         } else {
@@ -144,13 +133,8 @@ public class ShortLinkController {
         if (!find.isEmpty()) {
             JSONObject tmp;
             ShortLink oldData = find.get(0);
-            JSONObject d = new JSONObject();
-            d.put("key", oldData.getKey());
-            d.put("origin", oldData.getOrigin());
-            d.put("user_id", oldData.getUser_id());
-            d.put("view", oldData.getView());
-            d.put("create_time", oldData.getCreate_time());
-            tmp = new ApiResult(d).getJsonResult();
+            Gson gson = new Gson();
+            tmp = new ApiResult<>(gson.toJson(oldData)).getJsonResult();
             logger.info("API Logger, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), tmp.toString()));
             logger.warn("The request is a duplicate, returning an existing short link.");
             return tmp;
@@ -163,15 +147,10 @@ public class ShortLinkController {
         JSONObject r;
         if (isSetSuccess) {
             ShortLink generateLink = shortLinkService.getShortLinkByKey(json.getString("key")).get(0);
-            JSONObject d = new JSONObject();
-            d.put("key", generateLink.getKey());
-            d.put("origin", generateLink.getOrigin());
-            d.put("user_id", generateLink.getUser_id());
-            d.put("view", generateLink.getView());
-            d.put("create_time", generateLink.getCreate_time());
-            r = new ApiResult(d).getJsonResult();
+            Gson gson = new Gson();
+            r = new ApiResult<>(gson.toJson(generateLink)).getJsonResult();
         } else {
-            r = new ApiResult(COMMON_FAIL).getJsonResult();
+            r = new ApiResult<>(COMMON_FAIL).getJsonResult();
         }
 
         logger.info("API Logger, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), r.toString()));
