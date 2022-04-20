@@ -10,8 +10,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +21,8 @@ import static com.ahdark.code.link.utils.CodeInfo.*;
 
 @RestController
 @RequestMapping(path = "/api/shortLink")
+@Slf4j
 public class ShortLinkController {
-    private final Logger logger = LoggerFactory.getLogger(ShortLinkController.class);
     @Autowired
     private HttpServletRequest request;
     @Autowired
@@ -45,6 +44,8 @@ public class ShortLinkController {
 
     @GetMapping(path = "", params = {"key"})
     public JSONObject GetByKey(@RequestParam("key") String key) {
+        log.info("GET Short link event, through Key.");
+        log.info("Key: {}", key);
         List<ShortLink> results = shortLinkService.getShortLinkByKey(key);
         if (results.isEmpty()) {
             response.setStatus(404);
@@ -52,17 +53,18 @@ public class ShortLinkController {
         }
 
         ShortLink data = results.get(0);
-        Gson gson = new Gson();
 
         ApiResult<ShortLink> result = new ApiResult<>(data);
 
-        logger.info("API Logger, Method: %s, Uri: %s, %s".formatted(request.getMethod(), request.getRequestURI(), result.toString()));
+        log.info("Get Uri success: {}", result);
 
         return result.getJsonResult();
     }
 
     @GetMapping(path = "", params = {"userId"})
     public JSONObject GetById(@RequestParam("userId") int userId) {
+        log.info("GET Short link event, through userId.");
+        log.info("User ID: {}", userId);
         List<ShortLink> results = shortLinkService.getShortLinksById(userId);
         if (results.isEmpty()) {
             response.setStatus(404);
@@ -75,13 +77,15 @@ public class ShortLinkController {
 
         ApiResult<List<ShortLink>> result = new ApiResult<>(results);
 
-        logger.info("API Logger, Method: %s, Uri: %s, %s".formatted(request.getMethod(), request.getRequestURI(), result.toString()));
+        log.info("Get Uri success: {}", result);
 
         return result.getJsonResult();
     }
 
     @GetMapping(path = "", params = {"origin"})
     public JSONObject GetByUrl(@RequestParam("origin") String origin) {
+        log.info("GET Short link event, through Origin.");
+        log.info("Origin: {}", origin);
         if (!this.isOriginMatch(origin)) {
             response.setStatus(400);
             return new ApiResult<>(PARAM_NOT_VALID).getJsonResult();
@@ -94,7 +98,7 @@ public class ShortLinkController {
 
         ApiResult<List<ShortLink>> result = new ApiResult<>(results);
 
-        logger.info("API Logger, Method: %s, Uri: %s, %s".formatted(request.getMethod(), request.getRequestURI(), result.toString()));
+        log.info("Get Uri success: {}", result);
 
         return result.getJsonResult();
     }
@@ -135,8 +139,8 @@ public class ShortLinkController {
             ShortLink oldData = find.get(0);
             Gson gson = new Gson();
             tmp = new ApiResult<>(gson.toJson(oldData)).getJsonResult();
-            logger.info("API Logger, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), tmp.toString()));
-            logger.warn("The request is a duplicate, returning an existing short link.");
+            log.info("API log, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), tmp.toString()));
+            log.warn("The request is a duplicate, returning an existing short link.");
             return tmp;
         }
 
@@ -153,7 +157,7 @@ public class ShortLinkController {
             r = new ApiResult<>(COMMON_FAIL).getJsonResult();
         }
 
-        logger.info("API Logger, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), r.toString()));
+        log.info("API log, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), r.toString()));
 
         return r;
     }

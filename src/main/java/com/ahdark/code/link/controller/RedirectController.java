@@ -5,8 +5,7 @@ import com.ahdark.code.link.service.AsyncService;
 import com.ahdark.code.link.service.ShortLinkService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +16,8 @@ import java.util.List;
 
 @Controller
 @RequestMapping(path = "/go/")
+@Slf4j
 public class RedirectController {
-    private final Logger logger = LoggerFactory.getLogger(RedirectController.class);
     @Autowired
     HttpServletRequest request;
     @Autowired
@@ -40,10 +39,10 @@ public class RedirectController {
         try {
             response.sendRedirect(origin);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
 
-        logger.info("Request " + request.getRequestURI() + " has been redirected to " + origin);
+        log.info("Request {} has been redirected to {}", request.getRequestURL(), origin);
         asyncService.addLinkView(key);
     }
 }
