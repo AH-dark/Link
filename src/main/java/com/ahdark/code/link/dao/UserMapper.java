@@ -12,5 +12,5 @@ import java.util.Map;
 public interface UserMapper {
     List<User> getUser(User user);
 
-    List<Map<String, Object>> setUser(Map<String, Object> paramMap);
+    int setUser(Map<String, Object> paramMap);
 }
