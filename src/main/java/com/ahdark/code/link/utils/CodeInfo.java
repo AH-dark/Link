@@ -10,7 +10,7 @@ package com.ahdark.code.link.utils;
  * @Author AH-dark
  * @Description 返回码定义
  */
-public enum CodeResult {
+public enum CodeInfo {
     /* 成功 */
     SUCCESS(200, "success"),
 
@@ -41,13 +41,13 @@ public enum CodeResult {
     private final Integer code;
     private final String msg;
 
-    CodeResult(Integer code, String success) {
+    CodeInfo(Integer code, String success) {
         this.code = code;
         this.msg = success;
     }
 
     public static String getMessageByCode(Integer code) {
-        for (CodeResult ele : values()) {
+        for (CodeInfo ele : values()) {
             if (ele.getCode().equals(code)) {
                 return ele.getMsg();
             }

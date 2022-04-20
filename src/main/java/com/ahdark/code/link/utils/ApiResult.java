@@ -1,20 +1,20 @@
 package com.ahdark.code.link.utils;
 
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
 
 import java.io.Serializable;
-import java.util.List;
 
-import static com.ahdark.code.link.utils.CodeResult.SUCCESS;
+import static com.ahdark.code.link.utils.CodeInfo.SUCCESS;
 
 /**
  * API Result JSON Message
  *
  * @author AH-dark
  */
-public class ApiResult implements Serializable {
+public class ApiResult<T> implements Serializable {
     /**
      * 返回码
      */
@@ -27,8 +27,7 @@ public class ApiResult implements Serializable {
     /**
      * 数据
      */
-    private Object ObjectData;
-    private List<Object> ListData;
+    private T Data;
 
     /**
      * 异常
@@ -39,50 +38,30 @@ public class ApiResult implements Serializable {
         super();
     }
 
-    public ApiResult(CodeResult codeResult) {
+    public ApiResult(CodeInfo codeInfo) {
         super();
-        this.Code = codeResult.getCode();
-        this.Message = codeResult.getMsg();
+        this.Code = codeInfo.getCode();
+        this.Message = codeInfo.getMsg();
     }
 
-    public ApiResult(CodeResult codeResult, JSONObject data) {
+    public ApiResult(CodeInfo codeInfo, T data) {
         super();
-        this.Code = codeResult.getCode();
-        this.Message = codeResult.getMsg();
-        this.ObjectData = data;
+        this.Code = codeInfo.getCode();
+        this.Message = codeInfo.getMsg();
+        this.Data = data;
     }
 
-    public ApiResult(CodeResult codeResult, JSONArray data) {
+    public ApiResult(CodeInfo codeInfo, T data, String exceptions) {
         super();
-        this.Code = codeResult.getCode();
-        this.Message = codeResult.getMsg();
-        this.ListData = data;
-    }
-
-    public ApiResult(CodeResult codeResult, JSONObject data, String exceptions) {
-        super();
-        this.Code = codeResult.getCode();
-        this.Message = codeResult.getMsg();
-        this.ObjectData = data;
+        this.Code = codeInfo.getCode();
+        this.Message = codeInfo.getMsg();
+        this.Data = data;
         this.Exceptions = exceptions;
     }
 
-    public ApiResult(CodeResult codeResult, JSONArray data, String exceptions) {
+    public ApiResult(T data) {
         super();
-        this.Code = codeResult.getCode();
-        this.Message = codeResult.getMsg();
-        this.ListData = data;
-        this.Exceptions = exceptions;
-    }
-
-    public ApiResult(JSONObject data) {
-        super();
-        this.ObjectData = data;
-    }
-
-    public ApiResult(JSONArray data) {
-        super();
-        this.ListData = data;
+        this.Data = data;
     }
 
     public void setCode(int code) {
@@ -97,12 +76,8 @@ public class ApiResult implements Serializable {
         this.Message = message;
     }
 
-    public void setData(Object objectData) {
-        this.ObjectData = objectData;
-    }
-
-    public void setData(List<Object> listData) {
-        ListData = listData;
+    public void setData(T data) {
+        this.Data = data;
     }
 
     public void setExceptions(String exceptions) {
@@ -113,10 +88,9 @@ public class ApiResult implements Serializable {
         JSONObject json = new JSONObject();
         json.put("code", this.Code);
         json.put("message", this.Message);
-        if (this.ObjectData != null) {
-            json.put("data", this.ObjectData);
-        } else if (this.ListData != null) {
-            json.put("data", this.ListData);
+        if (this.Data != null) {
+            Gson gson = new Gson();
+            json.put("data", JSON.parse(gson.toJson(this.Data)));
         }
         if (this.Exceptions != null) {
             json.put("exceptions", this.Exceptions);
@@ -126,10 +100,8 @@ public class ApiResult implements Serializable {
 
     @Override
     public String toString() {
-        if (this.ObjectData != null) {
-            return "ApiResult [code=" + this.Code + ", info=" + this.Message + ", data=" + this.ObjectData + ", exceptions=" + this.Exceptions + "]";
-        } else if (this.ListData != null) {
-            return "ApiResult [code=" + this.Code + ", info=" + this.Message + ", data=" + this.ListData + ", exceptions=" + this.Exceptions + "]";
+        if (this.Data != null) {
+            return "ApiResult [code=" + this.Code + ", info=" + this.Message + ", data=" + this.Data + ", exceptions=" + this.Exceptions + "]";
         } else {
             return "ApiResult [code=" + this.Code + ", info=" + this.Message + "]";
         }
