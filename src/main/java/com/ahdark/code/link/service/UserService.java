@@ -9,4 +9,6 @@ public interface UserService {
     User getUserById(int id);
 
     boolean setUser(User user);
+
+    boolean updateLoginTime(int id);
 }

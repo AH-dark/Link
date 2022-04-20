@@ -3,16 +3,12 @@ package com.ahdark.code.link.service.impl;
 import com.ahdark.code.link.dao.UserMapper;
 import com.ahdark.code.link.pojo.User;
 import com.ahdark.code.link.service.UserService;
-import com.ahdark.code.link.utils.CodeInfo;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-
-import static com.ahdark.code.link.utils.CodeInfo.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -23,24 +19,37 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(String email) {
         User user = new User();
         user.setEmail(email);
-        return this.userMapper.getUser(user).get(1);
+        List<User> results = this.userMapper.getUser(user);
+        if (results.isEmpty()) {
+            return null;
+        } else {
+            return results.get(0); // Email is unique
+        }
     }
 
     @Override
     public User getUserById(int id) {
         User user = new User();
         user.setId(id);
-        return this.userMapper.getUser(user).get(1);
+        List<User> results = this.userMapper.getUser(user);
+        if (results.isEmpty()) {
+            return null;
+        } else {
+            return results.get(0); // ID is unique
+        }
     }
 
     @Override
     public boolean setUser(User user) {
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("name", user.getName());
-        paramMap.put("email", user.getEmail());
-        paramMap.put("password", user.getPassword());
-        paramMap.put("register_ip", user.getRegister_ip());
-        int result = this.userMapper.setUser(paramMap);
-        return result!=0;
+        int result = this.userMapper.setUser(user);
+        return result != 0;
+    }
+
+    @Override
+    public boolean updateLoginTime(int id) {
+        User user = new User();
+        user.setId(id);
+        int result = this.userMapper.updateLoginTime(user);
+        return result != 0;
     }
 }

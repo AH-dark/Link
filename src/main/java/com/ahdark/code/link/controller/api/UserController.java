@@ -27,16 +27,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    public UserController(HttpServletResponse response, HttpServletRequest request, UserService userService) {
-        this.response = response;
-        this.request = request;
-        this.userService = userService;
-    }
-
     @GetMapping(params = {"email"})
     public JSONObject GetByEmail(@RequestParam("email") String email) {
         log.info("GET user event, through Email.");
         log.info("Email: {}", email);
+
         User user = this.userService.getUserByEmail(email);
         if (user == null) {
             return new ApiResult<>(USER_ACCOUNT_NOT_EXIST).getJsonResult();
@@ -54,12 +49,13 @@ public class UserController {
     public JSONObject GetById(@RequestParam("id") Integer id) {
         log.info("GET user event, through ID.");
         log.info("ID: {}", id);
+
         User user = this.userService.getUserById(id);
         if (user == null) {
             return new ApiResult<>(USER_ACCOUNT_NOT_EXIST).getJsonResult();
         }
-        Gson gson = new Gson();
 
+        Gson gson = new Gson();
         ApiResult<String> result = new ApiResult<>(gson.toJson(user, User.class));
 
         log.info("Get User success: {}", result);

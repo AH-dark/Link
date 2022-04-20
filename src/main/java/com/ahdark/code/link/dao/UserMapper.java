@@ -12,5 +12,7 @@ import java.util.Map;
 public interface UserMapper {
     List<User> getUser(User user);
 
-    int setUser(Map<String, Object> paramMap);
+    int setUser(User user);
+
+    int updateLoginTime(User user);
 }

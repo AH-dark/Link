@@ -6,17 +6,17 @@
         SELECT * FROM users
         <where>
             <if test='email!=null and email!=""'>
-                `email`='#{email}'
+                and `email`=#{email}
             </if>
             <if test='id!=null and id!=""'>
-                `id`=#{id}
+                and `id`=#{id}
             </if>
             <if test='password!=null and password!=""'>
-                `password`='#{password}'
+                and `password`=#{password}
             </if>
         </where>
     </select>
-    <insert id="setUser" parameterType="java.util.Map">
+    <insert id="setUser" parameterType="com.ahdark.code.link.pojo.User">
         INSERT INTO users (name, email, password, register_ip) VALUES (
         <if test='name!=null and name!=""'>
             `name`=#{name},
@@ -32,4 +32,7 @@
         </if>
         )
     </insert>
+    <update id="updateLoginTime" parameterType="com.ahdark.code.link.pojo.User">
+        UPDATE users SET login_time=current_timestamp WHERE id=#{id}
+    </update>
 </mapper>

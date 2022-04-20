@@ -46,13 +46,11 @@ public class ShortLinkController {
     public JSONObject GetByKey(@RequestParam("key") String key) {
         log.info("GET Short link event, through Key.");
         log.info("Key: {}", key);
-        List<ShortLink> results = shortLinkService.getShortLinkByKey(key);
-        if (results.isEmpty()) {
-            response.setStatus(404);
+
+        ShortLink data = shortLinkService.getShortLinkByKey(key);
+        if(data == null) {
             return new ApiResult<>(NO_DATA).getJsonResult();
         }
-
-        ShortLink data = results.get(0);
 
         ApiResult<ShortLink> result = new ApiResult<>(data);
 
@@ -150,7 +148,7 @@ public class ShortLinkController {
         // Check and response
         JSONObject r;
         if (isSetSuccess) {
-            ShortLink generateLink = shortLinkService.getShortLinkByKey(json.getString("key")).get(0);
+            ShortLink generateLink = shortLinkService.getShortLinkByKey(json.getString("key"));
             Gson gson = new Gson();
             r = new ApiResult<>(gson.toJson(generateLink)).getJsonResult();
         } else {

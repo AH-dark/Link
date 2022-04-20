@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
-import java.util.List;
+
+import static com.ahdark.code.link.utils.CodeInfo.NO_DATA;
 
 @Controller
 @RequestMapping(path = "/go/")
@@ -33,9 +34,12 @@ public class RedirectController {
      * @param key 链接标记
      */
     @RequestMapping(path = "/{key}")
-    public void Redirect(@PathVariable String key) {
-        List<ShortLink> result = shortLinkService.getShortLinkByKey(key);
-        String origin = result.get(0).getOrigin();
+    public String Redirect(@PathVariable String key) {
+        ShortLink result = shortLinkService.getShortLinkByKey(key);
+        if(result == null) {
+            return NO_DATA.getMsg();
+        }
+        String origin = result.getOrigin();
         try {
             response.sendRedirect(origin);
         } catch (IOException e) {
@@ -44,5 +48,6 @@ public class RedirectController {
 
         log.info("Request {} has been redirected to {}", request.getRequestURL(), origin);
         asyncService.addLinkView(key);
+        return null;
     }
 }

@@ -14,10 +14,15 @@ public class ShortLinkServiceImpl implements ShortLinkService {
     private ShortLinkMapper shortLinkMapper;
 
     @Override
-    public List<ShortLink> getShortLinkByKey(String key) {
+    public ShortLink getShortLinkByKey(String key) {
         ShortLink shortLink = new ShortLink();
         shortLink.setKey(key);
-        return this.shortLinkMapper.getShortLink(shortLink);
+        List<ShortLink> results = this.shortLinkMapper.getShortLink(shortLink);
+        if(results.isEmpty()) {
+            return null;
+        } else {
+            return results.get(0);
+        }
     }
 
     @Override
@@ -38,6 +43,12 @@ public class ShortLinkServiceImpl implements ShortLinkService {
     public Boolean setShortLinks(ShortLink shortLinks) {
         int result = this.shortLinkMapper.setShortLinks(shortLinks);
         return result != 0;
+    }
+
+    @Override
+    public Boolean addView(ShortLink shortLink) {
+        int result = this.shortLinkMapper.addView(shortLink);
+        return result!=0;
     }
 
 }
