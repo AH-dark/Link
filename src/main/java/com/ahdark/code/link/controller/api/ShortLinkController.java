@@ -32,7 +32,7 @@ public class ShortLinkController {
     @Autowired
     private UserService userService;
 
-    private boolean isOriginMatch(String origin) {
+    private static boolean isOriginMatch(String origin) {
         String originPattern = "^https?://([\\w-]+\\.)+[\\w-]+(/[\\w-./?%&=]*)?$";
         return Pattern.matches(originPattern, origin);
     }
@@ -84,7 +84,7 @@ public class ShortLinkController {
     public JSONObject GetByUrl(@RequestParam("origin") String origin) {
         log.info("GET Short link event, through Origin.");
         log.info("Origin: {}", origin);
-        if (!this.isOriginMatch(origin)) {
+        if (!isOriginMatch(origin)) {
             response.setStatus(400);
             return new ApiResult<>(PARAM_NOT_VALID).getJsonResult();
         }
