@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.regex.Pattern;
 import static com.ahdark.code.link.utils.CodeInfo.*;
 
 @RestController
-@RequestMapping(path = "/api/shortLink")
+@RequestMapping(path = "/api/shortLink", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class ShortLinkController {
     @Autowired

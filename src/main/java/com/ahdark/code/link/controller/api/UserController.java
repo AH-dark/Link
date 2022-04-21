@@ -4,11 +4,11 @@ import com.ahdark.code.link.pojo.User;
 import com.ahdark.code.link.service.UserService;
 import com.ahdark.code.link.utils.ApiResult;
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static com.ahdark.code.link.utils.CodeInfo.USER_ACCOUNT_NOT_EXIST;
 
 @RestController
-@RequestMapping(path = "/api/user")
+@RequestMapping(path = "/api/user", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class UserController {
     @Autowired
@@ -37,8 +37,7 @@ public class UserController {
             return new ApiResult<>(USER_ACCOUNT_NOT_EXIST).getJsonResult();
         }
 
-        Gson gson = new Gson();
-        ApiResult<String> result = new ApiResult<>(gson.toJson(user, User.class));
+        ApiResult<User> result = new ApiResult<>(user);
 
         log.info("Get User success: {}", result);
 
@@ -55,8 +54,7 @@ public class UserController {
             return new ApiResult<>(USER_ACCOUNT_NOT_EXIST).getJsonResult();
         }
 
-        Gson gson = new Gson();
-        ApiResult<String> result = new ApiResult<>(gson.toJson(user, User.class));
+        ApiResult<User> result = new ApiResult<>(user);
 
         log.info("Get User success: {}", result);
 

@@ -24,7 +24,7 @@ import java.util.Objects;
 import static com.ahdark.code.link.utils.CodeInfo.*;
 
 @RestController
-@RequestMapping(path = "/api/login")
+@RequestMapping(path = "/api/login", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class LoginController {
     @Autowired
@@ -39,7 +39,7 @@ public class LoginController {
     @Autowired
     private HttpSession session;
 
-    @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "")
     public JSONObject Login(@RequestBody String body) {
         log.info("Login event detected.");
 
