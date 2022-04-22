@@ -137,7 +137,7 @@ public class ShortLinkController {
             JSONObject tmp;
             ShortLink oldData = find.get(0);
             Gson gson = new Gson();
-            tmp = new ApiResult<>(gson.toJson(oldData)).getJsonResult();
+            tmp = new ApiResult<>(oldData).getJsonResult();
             log.info("API log, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), tmp.toString()));
             log.warn("The request is a duplicate, returning an existing short link.");
             return tmp;
@@ -150,8 +150,7 @@ public class ShortLinkController {
         JSONObject r;
         if (isSetSuccess) {
             ShortLink generateLink = shortLinkService.getShortLinkByKey(json.getString("key"));
-            Gson gson = new Gson();
-            r = new ApiResult<>(gson.toJson(generateLink)).getJsonResult();
+            r = new ApiResult<>(generateLink).getJsonResult();
         } else {
             r = new ApiResult<>(COMMON_FAIL).getJsonResult();
         }
