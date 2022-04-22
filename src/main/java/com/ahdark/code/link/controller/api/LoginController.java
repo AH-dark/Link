@@ -76,7 +76,7 @@ public class LoginController {
 
             log.info("Login success, session has been created: {}", session.getAttribute(sessionId));
 
-            return new ApiResult<>(SUCCESS, gson.toJson(userData)).getJsonResult();
+            return new ApiResult<>(SUCCESS, userData).getJsonResult();
         }
     }
 }
