@@ -5,7 +5,6 @@ import com.ahdark.code.link.pojo.User;
 import com.ahdark.code.link.service.ShortLinkService;
 import com.ahdark.code.link.service.UserService;
 import com.ahdark.code.link.utils.ApiResult;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.ahdark.code.link.utils.CodeInfo.*;
@@ -24,6 +24,8 @@ import static com.ahdark.code.link.utils.CodeInfo.*;
 @RequestMapping(path = "/api/shortLink", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class ShortLinkController {
+    private final Gson gson = new Gson();
+    private final Pattern pattern = Pattern.compile("^https?://([\\w-]+\\.)+[\\w-]+(/[\\w-./?%&=]*)?$", Pattern.CASE_INSENSITIVE);
     @Autowired
     private HttpServletRequest request;
     @Autowired
@@ -33,9 +35,9 @@ public class ShortLinkController {
     @Autowired
     private UserService userService;
 
-    private static boolean isOriginMatch(String origin) {
-        String originPattern = "^https?://([\\w-]+\\.)+[\\w-]+(/[\\w-./?%&=]*)?$";
-        return Pattern.matches(originPattern, origin);
+    private boolean isOriginMatch(String origin) {
+        Matcher matcher = pattern.matcher(origin);
+        return matcher.matches();
     }
 
     @GetMapping(path = "")
@@ -49,9 +51,10 @@ public class ShortLinkController {
         log.info("Key: {}", key);
 
         ShortLink data = shortLinkService.getShortLinkByKey(key);
-        if(data == null) {
+        if (data == null) {
             return new ApiResult<>(NO_DATA).getJsonResult();
         }
+        log.info("{}", data);
 
         ApiResult<ShortLink> result = new ApiResult<>(data);
 
@@ -104,39 +107,43 @@ public class ShortLinkController {
 
     @PostMapping(path = "")
     public JSONObject Post(@RequestBody String body) {
-        JSONObject json = JSON.parseObject(body);
-        ShortLink shortLinks = new ShortLink();
+        log.info("There is a new short link generation request.");
+        ShortLink shortLinks = gson.fromJson(body, ShortLink.class);
 
         // Data Check
-        if (json.getString("key") != null && json.getString("key").length() > 3) {
-            shortLinks.setKey(json.getString("key"));
-        } else {
+
+        // Check Key
+        if (shortLinks.getKey() == null || shortLinks.getKey().length() <= 3) {
+            log.error("Error: Key is not found or too short");
             response.setStatus(400);
             return new ApiResult<>(PARAM_NOT_COMPLETE).getJsonResult();
         }
 
-        if (json.getString("origin") != null && isOriginMatch(json.getString("origin"))) {
-            shortLinks.setOrigin(json.getString("origin"));
-        } else {
+        // Check Origin
+        if (shortLinks.getOrigin() == null || !isOriginMatch(shortLinks.getOrigin())) {
+            log.error("Error: Origin is not found or does not match the rule");
+            response.setStatus(400);
             return new ApiResult<>(PARAM_NOT_COMPLETE).getJsonResult();
         }
 
-        if (json.getInteger("user_id") != null && json.getInteger("user_id") > 0) {
-            User result = userService.getUserById(json.getInteger("user_id"));
-            if (result == null) {
+        // Check Creator
+        if (shortLinks.getUser_id() > 0) {
+            // Check user existed
+            User result = userService.getUserById(shortLinks.getUser_id());
+            if (result == null) { // Check user exist
+                log.error("Error: User does not exist");
+                response.setStatus(400);
                 return new ApiResult<>(USER_ACCOUNT_NOT_EXIST).getJsonResult();
             }
-            shortLinks.setUser_id(json.getInteger("user_id"));
         } else {
-            shortLinks.setUser_id(null);
+            shortLinks.setUser_id(0);
         }
 
         // Data Duplication Detection
-        List<ShortLink> find = shortLinkService.getShortLinkByUrl(json.getString("origin"));
+        List<ShortLink> find = shortLinkService.getShortLinkByUrl(shortLinks.getOrigin());
         if (!find.isEmpty()) {
             JSONObject tmp;
             ShortLink oldData = find.get(0);
-            Gson gson = new Gson();
             tmp = new ApiResult<>(oldData).getJsonResult();
             log.info("API log, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), tmp.toString()));
             log.warn("The request is a duplicate, returning an existing short link.");
@@ -147,16 +154,16 @@ public class ShortLinkController {
         Boolean isSetSuccess = shortLinkService.setShortLinks(shortLinks);
 
         // Check and response
-        JSONObject r;
+        ApiResult r;
         if (isSetSuccess) {
-            ShortLink generateLink = shortLinkService.getShortLinkByKey(json.getString("key"));
-            r = new ApiResult<>(generateLink).getJsonResult();
+            ShortLink generateLink = shortLinkService.getShortLinkByKey(shortLinks.getKey());
+            r = new ApiResult<>(generateLink);
         } else {
-            r = new ApiResult<>(COMMON_FAIL).getJsonResult();
+            r = new ApiResult<>(COMMON_FAIL);
         }
 
         log.info("API log, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), r.toString()));
 
-        return r;
+        return r.getJsonResult();
     }
 }
