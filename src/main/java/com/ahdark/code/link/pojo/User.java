@@ -8,12 +8,12 @@ import java.sql.Timestamp;
 @Data
 @Component
 public class User {
-    private Integer id = null;
-    private String name = null;
-    private String email = null;
-    private String password = null;
-    private Timestamp create_time = null;
-    private String register_ip = null;
-    private Timestamp login_time = null;
-    private Boolean available = null;
+    private Integer id;
+    private String name;
+    private String email;
+    private String password;
+    private Timestamp create_time;
+    private String register_ip;
+    private Timestamp login_time;
+    private Boolean available;
 }

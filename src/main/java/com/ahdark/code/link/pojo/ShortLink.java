@@ -8,9 +8,9 @@ import java.sql.Timestamp;
 @Data
 @Component
 public class ShortLink {
-    private String key = null;
-    private String origin = null;
-    private Integer user_id = null;
-    private Integer view = null;
-    private Timestamp create_time = null;
+    private String key;
+    private String origin;
+    private int user_id;
+    private int view;
+    private Timestamp create_time;
 }
