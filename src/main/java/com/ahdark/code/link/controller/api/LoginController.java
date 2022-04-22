@@ -1,10 +1,10 @@
 package com.ahdark.code.link.controller.api;
 
+import com.ahdark.code.link.pojo.LoginData;
 import com.ahdark.code.link.pojo.User;
 import com.ahdark.code.link.service.AsyncService;
 import com.ahdark.code.link.service.UserService;
 import com.ahdark.code.link.utils.ApiResult;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +27,7 @@ import static com.ahdark.code.link.utils.CodeInfo.*;
 @RequestMapping(path = "/api/login", produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 public class LoginController {
+    private final Gson gson = new Gson();
     @Autowired
     private HttpServletRequest request;
     @Autowired
@@ -35,7 +36,6 @@ public class LoginController {
     private UserService userService;
     @Autowired
     private AsyncService asyncService;
-
     @Autowired
     private HttpSession session;
 
@@ -43,14 +43,14 @@ public class LoginController {
     public JSONObject Login(@RequestBody String body) {
         log.info("Login event detected.");
 
-        JSONObject data = JSON.parseObject(body);
-
         if (body.isEmpty()) { // Check param
             return new ApiResult<>(PARAM_IS_BLANK).getJsonResult();
         }
 
-        String email = data.getString("email");
-        String password = data.getString("password");
+        LoginData loginData = gson.fromJson(body, LoginData.class);
+
+        String email = loginData.getEmail();
+        String password = loginData.getPassword();
         if (email == null || password == null) { // Check param
             return new ApiResult<>(PARAM_NOT_COMPLETE).getJsonResult();
         }
@@ -70,13 +70,12 @@ public class LoginController {
         } else {
             String sessionId = session.getId();
             session.setAttribute(sessionId, userData);
-            session.setMaxInactiveInterval(1800);
+            session.setMaxInactiveInterval(loginData.isRemember() ? 604800 : 1800);
 
             asyncService.updateUserLoginTime(userData.getId());
 
             log.info("Login success, session has been created: {}", session.getAttribute(sessionId));
 
-            Gson gson = new Gson();
             return new ApiResult<>(SUCCESS, gson.toJson(userData)).getJsonResult();
         }
     }
