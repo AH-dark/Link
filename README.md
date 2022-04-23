@@ -5,6 +5,17 @@
 ## SQL
 
 ```sql
+create table if not exists config
+(
+    name  varchar(255) not null
+        primary key,
+    value varchar(255) null,
+    type  varchar(15)  null,
+    constraint config_name_uindex
+        unique (name)
+)
+    comment '站点配置';
+
 create table if not exists short_links
 (
     `key`       varchar(255)                        not null comment '短链接后缀'
