@@ -6,5 +6,6 @@ FROM openjdk:18-jdk-alpine AS runner
 VOLUME /tmp
 
 COPY --from=builder target/Link-*.jar app.jar
+COPY src/main/resources/application.properties src/main/resources/application.properties
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
