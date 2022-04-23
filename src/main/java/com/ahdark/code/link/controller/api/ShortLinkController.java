@@ -1,20 +1,24 @@
 package com.ahdark.code.link.controller.api;
 
 import com.ahdark.code.link.pojo.ShortLink;
+import com.ahdark.code.link.pojo.SiteConfig;
 import com.ahdark.code.link.pojo.User;
 import com.ahdark.code.link.service.ShortLinkService;
+import com.ahdark.code.link.service.SiteConfigService;
 import com.ahdark.code.link.service.UserService;
 import com.ahdark.code.link.utils.ApiResult;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,6 +38,10 @@ public class ShortLinkController {
     private ShortLinkService shortLinkService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private SiteConfigService siteConfigService;
+    @Autowired
+    private HttpSession session;
 
     private boolean isOriginMatch(String origin) {
         Matcher matcher = pattern.matcher(origin);
@@ -109,6 +117,17 @@ public class ShortLinkController {
     public JSONObject Post(@RequestBody String body) {
         log.info("There is a new short link generation request.");
         ShortLink shortLinks = gson.fromJson(body, ShortLink.class);
+
+        SiteConfig enableTouristShorten = new SiteConfig();
+        enableTouristShorten.setName("enableTouristShorten");
+        if (Objects.equals(siteConfigService.get(enableTouristShorten).getValue(), "true")) {
+            String sessionId = session.getId();
+            Object data = session.getAttribute(sessionId);
+            if (data == null) {
+                log.warn("User not log in, use session id {}", sessionId);
+                return new ApiResult<>(USER_NOT_LOGIN).getJsonResult();
+            }
+        }
 
         // Data Check
 
