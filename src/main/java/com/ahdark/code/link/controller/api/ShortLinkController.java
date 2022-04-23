@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -127,16 +128,16 @@ public class ShortLinkController {
         }
 
         // Check Creator
-        if (shortLinks.getUser_id() > 0) {
+        if (shortLinks.getUserId() > 0) {
             // Check user existed
-            User result = userService.getUserById(shortLinks.getUser_id());
+            User result = userService.getUserById(shortLinks.getUserId());
             if (result == null) { // Check user exist
                 log.error("Error: User does not exist");
                 response.setStatus(400);
                 return new ApiResult<>(USER_ACCOUNT_NOT_EXIST).getJsonResult();
             }
         } else {
-            shortLinks.setUser_id(0);
+            shortLinks.setUserId(0);
         }
 
         // Data Duplication Detection
@@ -154,9 +155,10 @@ public class ShortLinkController {
         Boolean isSetSuccess = shortLinkService.setShortLinks(shortLinks);
 
         // Check and response
-        ApiResult r;
+        ApiResult<ShortLink> r;
         if (isSetSuccess) {
             ShortLink generateLink = shortLinkService.getShortLinkByKey(shortLinks.getKey());
+            log.info("Result: {}", generateLink);
             r = new ApiResult<>(generateLink);
         } else {
             r = new ApiResult<>(COMMON_FAIL);

@@ -10,7 +10,7 @@ create table if not exists short_links
     `key`       varchar(255)                        not null comment '短链接后缀'
         primary key,
     origin      varchar(255)                        not null comment '长链接地址',
-    user_id     int                                 null comment '创建者ID，游客创建则为null',
+    userId      int       default 0                 not null comment '创建者ID，游客创建则为null',
     view        int       default 0                 not null comment '访问次数',
     create_time timestamp default CURRENT_TIMESTAMP not null comment '创建时间',
     constraint short_links_key_uindex
@@ -19,7 +19,7 @@ create table if not exists short_links
     comment '短链接存储';
 
 create index short_links_user_id_index
-    on short_links (user_id);
+    on short_links (userId);
 
 create table if not exists users
 (
@@ -37,8 +37,8 @@ create table if not exists users
     constraint users_id_uindex
         unique (id)
 )
-    comment '用户信息';
+    comment '用户信息' auto_increment = 2;
 
 ```
 
-> Updated on 2022.04.16
+> Updated on 2022.04.23

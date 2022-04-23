@@ -17,7 +17,7 @@ public interface ShortLinkMapper {
      * @param shortLink 参数，需要 Key
      * @return SQL执行返回值
      */
-    int addView(ShortLink shortLink);
+    boolean addView(ShortLink shortLink);
 
-    int setShortLinks(ShortLink shortLink);
+    boolean setShortLinks(ShortLink shortLink);
 }

@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 public class ShortLink {
     private String key;
     private String origin;
-    private int user_id;
+    private int userId;
     private int view;
     private Timestamp create_time;
 }
