@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.ahdark.code</groupId>
     <artifactId>Link</artifactId>
-    <version>beta.0.2-SNAPSHOT</version>
+    <version>beta.1.0</version>
     <name>Link</name>
     <description>Link</description>
     <properties>
