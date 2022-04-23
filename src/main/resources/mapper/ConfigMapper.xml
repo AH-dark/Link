@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ahdark.code.link.dao.ConfigMapper">
     <select id="get" useCache="true" resultType="com.ahdark.code.link.pojo.SiteConfig"
-            parameterType="com.ahdark.code.link.pojo.SiteConfig">
+            parameterType="com.ahdark.code.link.pojo.SiteConfig" flushCache="false">
         SELECT * from config
         <where>
             <if test='name != null and name != ""'>

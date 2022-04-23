@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -139,6 +138,11 @@ public class ShortLinkController {
         } else {
             shortLinks.setUserId(0);
         }
+
+        // Deduplication
+        shortLinks.setOrigin(shortLinks.getOrigin().trim()); // remove spaces
+        shortLinks.setOrigin(shortLinks.getOrigin().replace("/+$", "")); // remove trailing '/'
+        // TODO: Protocol processing to avoid generating different links for different protocols
 
         // Data Duplication Detection
         List<ShortLink> find = shortLinkService.getShortLinkByUrl(shortLinks.getOrigin());
