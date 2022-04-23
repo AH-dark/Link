@@ -3,6 +3,7 @@ package com.ahdark.code.link.service.impl;
 import com.ahdark.code.link.dao.ConfigMapper;
 import com.ahdark.code.link.pojo.SiteConfig;
 import com.ahdark.code.link.service.SiteConfigService;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,8 @@ import java.util.Map;
 public class SiteConfigServiceImpl implements SiteConfigService {
     @Autowired
     private ConfigMapper configMapper;
+
+    private final Gson gson = new Gson();
 
     @Override
     public SiteConfig get(SiteConfig siteConfig) {
@@ -34,6 +37,7 @@ public class SiteConfigServiceImpl implements SiteConfigService {
             switch (typeName) {
                 case "boolean", "bool" -> map.put(siteConfig.getName(), Boolean.parseBoolean(siteConfig.getValue()));
                 case "number", "int", "integer" -> map.put(siteConfig.getName(), Integer.parseInt(siteConfig.getValue()));
+                case "json", "gson", "obj", "object" -> map.put(siteConfig.getName(), gson.fromJson(siteConfig.getValue(), Object.class));
                 case "str", "string", default -> map.put(siteConfig.getName(), siteConfig.getValue());
             }
         }
