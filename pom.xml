@@ -84,7 +84,6 @@
                 <configuration>
                     <source>18</source>
                     <target>18</target>
-                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
         </plugins>

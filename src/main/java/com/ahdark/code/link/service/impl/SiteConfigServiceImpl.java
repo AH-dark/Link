@@ -35,10 +35,26 @@ public class SiteConfigServiceImpl implements SiteConfigService {
         for (SiteConfig siteConfig : siteConfigs) {
             String typeName = siteConfig.getType().toLowerCase();
             switch (typeName) {
-                case "boolean", "bool" -> map.put(siteConfig.getName(), Boolean.parseBoolean(siteConfig.getValue()));
-                case "number", "int", "integer" -> map.put(siteConfig.getName(), Integer.parseInt(siteConfig.getValue()));
-                case "json", "gson", "obj", "object" -> map.put(siteConfig.getName(), gson.fromJson(siteConfig.getValue(), Object.class));
-                case "str", "string", default -> map.put(siteConfig.getName(), siteConfig.getValue());
+                case "bool":
+                case "boolean":
+                    map.put(siteConfig.getName(), Boolean.parseBoolean(siteConfig.getValue()));
+                    break;
+                case "number":
+                case "int":
+                case "integer":
+                    map.put(siteConfig.getName(), Integer.parseInt(siteConfig.getValue()));
+                    break;
+                case "json":
+                case "obj":
+                case "object":
+                case "gson":
+                    map.put(siteConfig.getName(), gson.fromJson(siteConfig.getValue(), Object.class));
+                    break;
+                case "str":
+                case "string":
+                default:
+                    map.put(siteConfig.getName(), siteConfig.getValue());
+                    break;
             }
         }
         return map;
