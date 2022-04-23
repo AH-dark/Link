@@ -8,4 +8,5 @@ import org.springframework.stereotype.Component;
 public class SiteConfig {
     private String name;
     private String value;
+    private String type;
 }

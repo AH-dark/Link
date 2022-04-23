@@ -26,11 +26,16 @@ public class SiteConfigServiceImpl implements SiteConfigService {
     }
 
     @Override
-    public Map<String, String> get() {
+    public Map<String, Object> get() {
         List<SiteConfig> siteConfigs = configMapper.get();
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         for (SiteConfig siteConfig : siteConfigs) {
-            map.put(siteConfig.getName(), siteConfig.getValue());
+            String typeName = siteConfig.getType().toLowerCase();
+            switch (typeName) {
+                case "boolean", "bool" -> map.put(siteConfig.getName(), Boolean.parseBoolean(siteConfig.getValue()));
+                case "number", "int", "integer" -> map.put(siteConfig.getName(), Integer.parseInt(siteConfig.getValue()));
+                case "str", "string", default -> map.put(siteConfig.getName(), siteConfig.getValue());
+            }
         }
         return map;
     }

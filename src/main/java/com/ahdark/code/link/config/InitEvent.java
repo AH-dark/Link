@@ -19,7 +19,7 @@ public class InitEvent implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        Map<String, String> siteConfigs = siteConfigService.get();
+        Map<String, Object> siteConfigs = siteConfigService.get();
         log.info("Get site config success: {}", gson.toJson(siteConfigs));
     }
 }

@@ -23,7 +23,7 @@ public class SiteConfigController {
 
     @GetMapping("")
     public JSONObject Get() {
-        Map<String, String> configs = siteConfigService.get();
+        Map<String, Object> configs = siteConfigService.get();
         return new ApiResult<>(configs).getJsonResult();
     }
 

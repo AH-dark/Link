@@ -7,7 +7,7 @@ import java.util.Map;
 public interface SiteConfigService {
     SiteConfig get(SiteConfig siteConfig);
 
-    Map<String, String> get();
+    Map<String, Object> get();
 
     Boolean set(String name, String value);
 }
