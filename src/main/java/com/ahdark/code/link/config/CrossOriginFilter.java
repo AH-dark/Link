@@ -1,4 +1,4 @@
-package com.ahdark.code.link.filter;
+package com.ahdark.code.link.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
