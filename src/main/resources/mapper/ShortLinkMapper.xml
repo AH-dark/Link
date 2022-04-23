@@ -30,6 +30,6 @@
         INSERT INTO short_links (`key`, origin, userId)
         VALUES (#{key},
                 #{origin},
-                #{user_id})
+                #{userId})
     </insert>
 </mapper>
