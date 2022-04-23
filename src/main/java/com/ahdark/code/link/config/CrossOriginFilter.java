@@ -1,4 +1,4 @@
-package com.ahdark.code.link.filter;
+package com.ahdark.code.link.config;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +12,8 @@ import java.util.Collections;
 
 @Configuration
 public class CrossOriginFilter {
-    @SuppressWarnings("unchecked")
     @Bean
-    public FilterRegistrationBean corsFilter() {
+    public FilterRegistrationBean<CorsFilter> corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
@@ -23,7 +22,7 @@ public class CrossOriginFilter {
         corsConfiguration.setAllowedMethods(Collections.singletonList(CorsConfiguration.ALL));
         corsConfiguration.addExposedHeader("Authorization");
         source.registerCorsConfiguration("/api/*", corsConfiguration);
-        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
     }
