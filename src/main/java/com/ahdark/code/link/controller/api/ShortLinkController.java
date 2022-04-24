@@ -1,7 +1,6 @@
 package com.ahdark.code.link.controller.api;
 
 import com.ahdark.code.link.pojo.ShortLink;
-import com.ahdark.code.link.pojo.SiteConfig;
 import com.ahdark.code.link.pojo.User;
 import com.ahdark.code.link.service.ShortLinkService;
 import com.ahdark.code.link.service.SiteConfigService;
@@ -13,12 +12,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -118,7 +119,7 @@ public class ShortLinkController {
         log.info("There is a new short link generation request.");
         ShortLink shortLinks = gson.fromJson(body, ShortLink.class);
 
-        if (Objects.equals(siteConfigService.get("enableTouristShorten"), "true")) {
+        if (Objects.equals(siteConfigService.get("enableTouristShorten"), false)) {
             String sessionId = session.getId();
             Object data = session.getAttribute(sessionId);
             if (data == null) {
@@ -130,7 +131,13 @@ public class ShortLinkController {
         // Data Check
 
         // Check Key
-        if (shortLinks.getKey() == null || shortLinks.getKey().length() <= 3) {
+        if (shortLinks.getKey() == null || Objects.equals(shortLinks.getKey(), "")) {
+            log.info("Key will be random");
+            shortLinks.setKey(RandomStringUtils.randomAlphabetic(6));
+            while (shortLinkService.getShortLinkByKey(shortLinks.getKey()) != null) {
+                shortLinks.setKey(RandomStringUtils.randomAlphabetic(6));
+            }
+        } else if (shortLinks.getKey().length() <= 3) {
             log.error("Error: Key is not found or too short");
             response.setStatus(400);
             return new ApiResult<>(PARAM_NOT_COMPLETE).getJsonResult();
@@ -170,6 +177,11 @@ public class ShortLinkController {
             log.info("API log, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), tmp.toString()));
             log.warn("The request is a duplicate, returning an existing short link.");
             return tmp;
+        }
+
+        // Check if exist
+        if (shortLinkService.getShortLinkByKey(shortLinks.getKey()) != null) {
+            return new ApiResult<>(DATA_IS_EXIST).getJsonResult();
         }
 
         // Insert
