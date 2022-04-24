@@ -118,9 +118,7 @@ public class ShortLinkController {
         log.info("There is a new short link generation request.");
         ShortLink shortLinks = gson.fromJson(body, ShortLink.class);
 
-        SiteConfig enableTouristShorten = new SiteConfig();
-        enableTouristShorten.setName("enableTouristShorten");
-        if (Objects.equals(siteConfigService.get(enableTouristShorten).getValue(), "true")) {
+        if (Objects.equals(siteConfigService.get("enableTouristShorten"), "true")) {
             String sessionId = session.getId();
             Object data = session.getAttribute(sessionId);
             if (data == null) {

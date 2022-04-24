@@ -29,12 +29,10 @@ public class SiteConfigController {
 
     @GetMapping(value = "", params = {"name"})
     public JSONObject Get(@RequestParam("name") String name) {
-        SiteConfig siteConfig = new SiteConfig();
-        siteConfig.setName(name);
-        SiteConfig resultConfig = siteConfigService.get(siteConfig);
-        if (resultConfig == null) {
+        Object result = siteConfigService.get(name);
+        if (result == null) {
             return new ApiResult<>(NO_DATA).getJsonResult();
         }
-        return new ApiResult<>(resultConfig).getJsonResult();
+        return new ApiResult<>(result).getJsonResult();
     }
 }

@@ -5,7 +5,7 @@ import com.ahdark.code.link.pojo.SiteConfig;
 import java.util.Map;
 
 public interface SiteConfigService {
-    SiteConfig get(SiteConfig siteConfig);
+    Object get(String name);
 
     Map<String, Object> get();
 

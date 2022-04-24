@@ -19,11 +19,29 @@ public class SiteConfigServiceImpl implements SiteConfigService {
     private final Gson gson = new Gson();
 
     @Override
-    public SiteConfig get(SiteConfig siteConfig) {
-        List<SiteConfig> siteConfigs = configMapper.get(siteConfig.getName());
+    public Object get(String name) {
+        List<SiteConfig> siteConfigs = configMapper.get(name);
         if (!siteConfigs.isEmpty()) {
-            siteConfig.setValue(siteConfigs.get(0).getValue());
-            return siteConfig;
+            String typeName = siteConfigs.get(0).getType();
+            String value = siteConfigs.get(0).getValue();
+            switch (typeName) {
+                case "bool":
+                case "boolean":
+                    return Boolean.parseBoolean(value);
+                case "number":
+                case "int":
+                case "integer":
+                    return Integer.parseInt(value);
+                case "json":
+                case "obj":
+                case "object":
+                case "gson":
+                    return gson.fromJson(value, Object.class);
+                case "str":
+                case "string":
+                default:
+                    return value;
+            }
         }
         return null;
     }
