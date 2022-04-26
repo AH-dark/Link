@@ -1,7 +1,6 @@
 package com.ahdark.code.link.service;
 
 import com.ahdark.code.link.pojo.User;
-import com.ahdark.code.link.utils.CodeInfo;
 
 public interface UserService {
     User getUserByEmail(String email);
@@ -9,6 +8,8 @@ public interface UserService {
     User getUserById(int id);
 
     boolean setUser(User user);
+
+    boolean updateUserInfo(User user);
 
     boolean updateLoginTime(int id);
 }

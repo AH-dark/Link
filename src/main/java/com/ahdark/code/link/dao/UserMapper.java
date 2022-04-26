@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 @Repository
@@ -15,4 +14,6 @@ public interface UserMapper {
     int setUser(User user);
 
     int updateLoginTime(User user);
+
+    int updateUserInfo(User user); // according key
 }

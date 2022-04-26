@@ -6,9 +6,7 @@ import com.ahdark.code.link.service.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -51,5 +49,11 @@ public class UserServiceImpl implements UserService {
         user.setId(id);
         int result = this.userMapper.updateLoginTime(user);
         return result != 0;
+    }
+
+    @Override
+    public boolean updateUserInfo(User user) {
+        int r = this.userMapper.updateUserInfo(user);
+        return r == 1;
     }
 }
