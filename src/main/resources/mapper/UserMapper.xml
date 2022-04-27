@@ -18,7 +18,7 @@
         </where>
     </select>
     <insert id="setUser" parameterType="com.ahdark.code.link.pojo.User" flushCache="true">
-        INSERT INTO users (name, email, password, register_ip) VALUES (
+        INSERT INTO users (name, email, password, registerIP) VALUES (
         <if test='name!=null and name!=""'>
             `name`=#{name},
         </if>
@@ -29,13 +29,13 @@
             `password`=#{password},
         </if>
         <if test='register_ip!=null and register_ip!=""'>
-            `register_ip`=#{register_ip},
+            registerIP=#{register_ip},
         </if>
         )
     </insert>
     <update id="updateLoginTime" parameterType="com.ahdark.code.link.pojo.User" flushCache="true">
         UPDATE users
-        SET login_time=current_timestamp
+        SET loginTime=current_timestamp
         WHERE id = #{id}
     </update>
     <update id="updateUserInfo" parameterType="com.ahdark.code.link.pojo.User" flushCache="true">
@@ -46,6 +46,9 @@
             </if>
             <if test='name!=null and name!=""'>
                 name=#{name},
+            </if>
+            <if test='description!=null and description!=""'>
+                description=#{description},
             </if>
         </set>
         <where>

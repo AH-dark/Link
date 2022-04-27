@@ -74,6 +74,14 @@ public class ShortLinkController {
 
     @GetMapping(path = "", params = {"userId"})
     public JSONObject GetById(@RequestParam("userId") int userId) {
+        Object sessionAttribute = session.getAttribute(session.getId());
+        User sessionUser = gson.fromJson(gson.toJsonTree(sessionAttribute), User.class);
+        if(sessionAttribute == null) {
+            return new ApiResult<>(NO_PERMISSION).getJsonResult();
+        } else if (sessionUser.getRole() != 1 && sessionUser.getId() != userId) {
+            return new ApiResult<>(NO_PERMISSION).getJsonResult();
+        }
+
         log.info("GET Short link event, through userId.");
         log.info("User ID: {}", userId);
         List<ShortLink> results = shortLinkService.getShortLinksById(userId);

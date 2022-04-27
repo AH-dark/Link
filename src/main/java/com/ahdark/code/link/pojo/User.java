@@ -12,8 +12,10 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private Timestamp create_time;
-    private String register_ip;
-    private Timestamp login_time;
+    private Integer role;
+    private String description;
+    private String registerIP;
+    private Timestamp createTime;
+    private Timestamp loginTime;
     private Boolean available;
 }

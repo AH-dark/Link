@@ -130,14 +130,20 @@ public class UserController {
         // password
         if (paramData.get("password") != null && paramData.get("password") != currentUser.getPassword()) {
             String changedPassword = String.valueOf(paramData.get("password"));
-            log.info("User {} password will be changed to {}", userId, changedPassword);
+            log.info("User {} password will be changed to '{}'", userId, changedPassword);
             currentUser.setPassword(DigestUtils.md5DigestAsHex(changedPassword.getBytes()).toUpperCase());
         }
         // name
         if (paramData.get("name") != null && paramData.get("name") != currentUser.getName()) {
             String changedName = String.valueOf(paramData.get("name"));
-            log.info("User (id: {}, email: {}) name will be changed to {}", userId, currentUser.getEmail(), changedName);
+            log.info("User (id: {}, email: {}) name will be changed to '{}'", userId, currentUser.getEmail(), changedName);
             currentUser.setName(changedName);
+        }
+        // role
+        if (paramData.get("description") != null && paramData.get("description") != currentUser.getDescription()) {
+            String changedDescription = String.valueOf(paramData.get("description"));
+            log.info("User (id: {}, email: {}) description will be changed to '{}'", userId, currentUser.getEmail(), changedDescription);
+            currentUser.setDescription(changedDescription);
         }
 
         // Update Database
