@@ -21,7 +21,7 @@ public class CrossOriginFilter {
         corsConfiguration.setAllowedHeaders(Collections.singletonList(CorsConfiguration.ALL));
         corsConfiguration.setAllowedMethods(Collections.singletonList(CorsConfiguration.ALL));
         corsConfiguration.addExposedHeader("Authorization");
-        source.registerCorsConfiguration("/api/*", corsConfiguration);
+        source.registerCorsConfiguration("/api/**", corsConfiguration);
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
