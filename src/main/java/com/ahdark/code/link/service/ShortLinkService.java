@@ -11,6 +11,8 @@ public interface ShortLinkService {
 
     List<ShortLink> getShortLinksById(int userId);
 
+    List<ShortLink> getLatestShortLink(int number);
+
     Boolean addView(ShortLink shortLink);
 
     Boolean setShortLinks(ShortLink shortLinks);

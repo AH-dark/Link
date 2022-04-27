@@ -40,6 +40,18 @@ public class ShortLinkServiceImpl implements ShortLinkService {
     }
 
     @Override
+    public List<ShortLink> getLatestShortLink(int number) {
+        if (number > 30 || number < 1) {
+            return null;
+        }
+        List<ShortLink> shortLinks = this.shortLinkMapper.getLatestShortLink(number);
+        if (shortLinks.isEmpty()) {
+            return null;
+        }
+        return shortLinks;
+    }
+
+    @Override
     public Boolean setShortLinks(ShortLink shortLinks) {
         return this.shortLinkMapper.setShortLinks(shortLinks);
     }

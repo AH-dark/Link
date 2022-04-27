@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,7 +75,7 @@ public class ShortLinkController {
     public JSONObject GetById(@RequestParam("userId") int userId) {
         Object sessionAttribute = session.getAttribute(session.getId());
         User sessionUser = gson.fromJson(gson.toJsonTree(sessionAttribute), User.class);
-        if(sessionAttribute == null) {
+        if (sessionAttribute == null) {
             return new ApiResult<>(NO_PERMISSION).getJsonResult();
         } else if (sessionUser.getRole() != 1 && sessionUser.getId() != userId) {
             return new ApiResult<>(NO_PERMISSION).getJsonResult();
@@ -208,5 +207,33 @@ public class ShortLinkController {
         log.info("API log, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), r.toString()));
 
         return r.getJsonResult();
+    }
+
+    @GetMapping("/latest")
+    public JSONObject GetLatestShortLink(@RequestParam(value = "size", required = false) Integer size) {
+        log.info("Get latest short link request.");
+        log.info("Request param size is {}.", size);
+
+        if (size != null && size > 30) {
+            return new ApiResult<>(NO_PERMISSION).getJsonResult();
+        }
+
+        int limit = size == null || size < 5 ? 10 : size;
+        log.info("{} pieces of data will be queried.", limit);
+
+        List<ShortLink> shortLinks = this.shortLinkService.getLatestShortLink(limit);
+
+        if (shortLinks == null) {
+            log.info("The data query returns a null value, and an error will be returned to the gateway.");
+            return new ApiResult<>(COMMON_FAIL).getJsonResult();
+        }
+
+        ApiResult<List<ShortLink>> apiResult = new ApiResult<>(SUCCESS, shortLinks);
+
+        if (shortLinks.size() != limit) {
+            apiResult.setExceptions("Not enough data returned.");
+        }
+
+        return apiResult.getJsonResult();
     }
 }

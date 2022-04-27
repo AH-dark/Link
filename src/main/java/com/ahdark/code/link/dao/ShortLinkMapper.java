@@ -9,15 +9,25 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ShortLinkMapper {
+    /**
+     * @param shortLink 短链接信息，可根据 Key、Origin、UserId 查找
+     * @return ShortLink 列表
+     */
     List<ShortLink> getShortLink(ShortLink shortLink);
+
+    List<ShortLink> getLatestShortLink(int limit);
 
     /**
      * Set view ++
      *
      * @param shortLink 参数，需要 Key
-     * @return SQL执行返回值
+     * @return 是否成功
      */
     boolean addView(ShortLink shortLink);
 
+    /**
+     * @param shortLink 参数，需要完整
+     * @return 是否成功
+     */
     boolean setShortLinks(ShortLink shortLink);
 }

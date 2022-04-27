@@ -17,6 +17,13 @@
             </if>
         </where>
     </select>
+    <select id="getLatestShortLink" parameterType="int" resultType="com.ahdark.code.link.pojo.ShortLink"
+            useCache="true">
+        SELECT *
+        FROM short_links
+        ORDER BY create_time DESC
+        LIMIT #{limit}
+    </select>
     <update id="addView" parameterType="com.ahdark.code.link.pojo.ShortLink" flushCache="false">
         UPDATE short_links
         <set>
