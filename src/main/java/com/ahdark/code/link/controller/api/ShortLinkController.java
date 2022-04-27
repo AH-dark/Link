@@ -210,7 +210,7 @@ public class ShortLinkController {
     }
 
     @GetMapping("/latest")
-    public JSONObject GetLatestShortLink(@RequestParam(value = "size", required = false) Integer size) {
+    public JSONObject GetLatestShortLink(@RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "page", required = false) Integer page) {
         log.info("Get latest short link request.");
         log.info("Request param size is {}.", size);
 
@@ -221,7 +221,9 @@ public class ShortLinkController {
         int limit = size == null || size < 5 ? 10 : size;
         log.info("{} pieces of data will be queried.", limit);
 
-        List<ShortLink> shortLinks = this.shortLinkService.getLatestShortLink(limit);
+        int offset = page != null ? (page - 1) * limit : 0;
+
+        List<ShortLink> shortLinks = this.shortLinkService.getLatestShortLink(limit, offset);
 
         if (shortLinks == null) {
             log.info("The data query returns a null value, and an error will be returned to the gateway.");

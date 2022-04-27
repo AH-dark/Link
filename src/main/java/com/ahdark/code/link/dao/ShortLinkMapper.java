@@ -1,5 +1,6 @@
 package com.ahdark.code.link.dao;
 
+import com.ahdark.code.link.pojo.LimitData;
 import com.ahdark.code.link.pojo.ShortLink;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,7 @@ public interface ShortLinkMapper {
      */
     List<ShortLink> getShortLink(ShortLink shortLink);
 
-    List<ShortLink> getLatestShortLink(int limit);
+    List<ShortLink> getLatestShortLink(LimitData limitData);
 
     /**
      * Set view ++

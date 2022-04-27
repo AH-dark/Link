@@ -1,6 +1,7 @@
 package com.ahdark.code.link.service.impl;
 
 import com.ahdark.code.link.dao.ShortLinkMapper;
+import com.ahdark.code.link.pojo.LimitData;
 import com.ahdark.code.link.pojo.ShortLink;
 import com.ahdark.code.link.service.ShortLinkService;
 import jakarta.annotation.Resource;
@@ -40,11 +41,29 @@ public class ShortLinkServiceImpl implements ShortLinkService {
     }
 
     @Override
-    public List<ShortLink> getLatestShortLink(int number) {
-        if (number > 30 || number < 1) {
+    public List<ShortLink> getLatestShortLink(int limit, int offset) {
+        if (limit > 30 || limit < 1) {
             return null;
         }
-        List<ShortLink> shortLinks = this.shortLinkMapper.getLatestShortLink(number);
+        LimitData limitData = new LimitData();
+        limitData.setLimit(limit);
+        limitData.setOffset(offset);
+        List<ShortLink> shortLinks = this.shortLinkMapper.getLatestShortLink(limitData);
+        if (shortLinks.isEmpty()) {
+            return null;
+        }
+        return shortLinks;
+    }
+
+    @Override
+    public List<ShortLink> getLatestShortLink(int limit) {
+        if (limit > 30 || limit < 1) {
+            return null;
+        }
+        LimitData limitData = new LimitData();
+        limitData.setLimit(limit);
+        limitData.setOffset(0);
+        List<ShortLink> shortLinks = this.shortLinkMapper.getLatestShortLink(limitData);
         if (shortLinks.isEmpty()) {
             return null;
         }
