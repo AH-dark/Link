@@ -35,6 +35,26 @@ public class UserController {
 
     private final Gson gson = new Gson();
 
+    @SuppressWarnings("RedundantIfStatement")
+    private boolean isPermission() {
+        String sessionId = session.getId();
+        if (sessionId == null) {
+            return false;
+        }
+
+        Object sessionAttribute = session.getAttribute(sessionId);
+        if (sessionAttribute == null) {
+            return false;
+        }
+
+        User user = gson.fromJson(gson.toJsonTree(sessionAttribute), User.class);
+        if (user == null) {
+            return false;
+        }
+
+        return true;
+    }
+
     @GetMapping
     public JSONObject GetByCookie() {
         String sessionId = session.getId();
@@ -42,7 +62,7 @@ public class UserController {
         log.info("GET user event, through Cookie.");
         log.info("Cookie: {}", sessionId);
 
-        Object data =  session.getAttribute(sessionId);
+        Object data = session.getAttribute(sessionId);
 
         if (data == null) {
             log.warn("User not log in, use session id {}", sessionId);
@@ -51,6 +71,12 @@ public class UserController {
 
         log.info("Get session success {}", data);
         User user = gson.fromJson(gson.toJsonTree(data), User.class);
+
+        if (!this.isPermission()) {
+            user.setPassword(null);
+            user.setLoginTime(null);
+            user.setRegisterIP(null);
+        }
 
         ApiResult<User> result = new ApiResult<>(user);
 
@@ -67,6 +93,12 @@ public class UserController {
         User user = this.userService.getUserByEmail(email);
         if (user == null) {
             return new ApiResult<>(USER_ACCOUNT_NOT_EXIST).getJsonResult();
+        }
+
+        if (!this.isPermission()) {
+            user.setPassword(null);
+            user.setLoginTime(null);
+            user.setRegisterIP(null);
         }
 
         ApiResult<User> result = new ApiResult<>(user);
@@ -87,6 +119,12 @@ public class UserController {
         }
 
         ApiResult<User> result = new ApiResult<>(user);
+
+        if (!this.isPermission()) {
+            user.setPassword(null);
+            user.setLoginTime(null);
+            user.setRegisterIP(null);
+        }
 
         log.info("Get User success: {}", result);
 
