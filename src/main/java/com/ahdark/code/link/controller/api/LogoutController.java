@@ -4,7 +4,7 @@ import com.ahdark.code.link.pojo.User;
 import com.ahdark.code.link.utils.ApiResult;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

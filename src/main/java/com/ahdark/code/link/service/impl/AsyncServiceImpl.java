@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import static java.lang.String.format;
+
 @Service
 @Slf4j
 public class AsyncServiceImpl implements AsyncService {
@@ -28,9 +30,9 @@ public class AsyncServiceImpl implements AsyncService {
         shortLink.setKey(key);
         Boolean status = shortLinkService.addView(shortLink);
         if (status) {
-            log.info("Success to update short link view data where key is %s.".formatted(key));
+            log.info(format("Success to update short link view data where key is %s.", key));
         } else {
-            log.error("Update short link view data error where key is %s.".formatted(key));
+            log.error(format("Update short link view data error where key is %s.", key));
         }
     }
 

@@ -8,9 +8,9 @@ import com.ahdark.code.link.service.UserService;
 import com.ahdark.code.link.utils.ApiResult;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.ahdark.code.link.utils.CodeInfo.*;
+import static java.lang.String.format;
 
 @RestController
 @RequestMapping(path = "/api/shortLink", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -173,7 +174,7 @@ public class ShortLinkController {
             JSONObject tmp;
             ShortLink oldData = find.get(0);
             tmp = new ApiResult<>(oldData).getJsonResult();
-            log.info("API log, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), tmp.toString()));
+            log.info(format("API log, Method: %s, Uri: %s, Result: %s", request.getMethod(), request.getRequestURI(), tmp));
             log.warn("The request is a duplicate, returning an existing short link.");
             return tmp;
         }
@@ -196,7 +197,7 @@ public class ShortLinkController {
             r = new ApiResult<>(COMMON_FAIL);
         }
 
-        log.info("API log, Method: %s, Uri: %s, Result: %s".formatted(request.getMethod(), request.getRequestURI(), r.toString()));
+        log.info(format("API log, Method: %s, Uri: %s, Result: %s", request.getMethod(), request.getRequestURI(), r));
 
         return r.getJsonResult();
     }

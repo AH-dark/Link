@@ -4,9 +4,9 @@ import com.ahdark.code.link.dao.ShortLinkMapper;
 import com.ahdark.code.link.pojo.LimitData;
 import com.ahdark.code.link.pojo.ShortLink;
 import com.ahdark.code.link.service.ShortLinkService;
-import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service

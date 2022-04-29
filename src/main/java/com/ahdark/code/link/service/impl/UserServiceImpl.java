@@ -3,9 +3,9 @@ package com.ahdark.code.link.service.impl;
 import com.ahdark.code.link.dao.UserMapper;
 import com.ahdark.code.link.pojo.User;
 import com.ahdark.code.link.service.UserService;
-import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
