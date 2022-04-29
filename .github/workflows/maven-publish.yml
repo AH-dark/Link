@@ -50,6 +50,12 @@ jobs:
           cp src/main/resources/application.example.properties src/main/resources/application.properties
           mv assets/build/* src/main/resources/public/
           mvn package --file pom.xml
+      
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: app.jar
+          path: target/Link-*.jar
 
       - name: Publish to GitHub Packages Apache Maven
         run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
