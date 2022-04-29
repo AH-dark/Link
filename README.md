@@ -68,7 +68,7 @@ create table if not exists users
 
 需要预安装以下内容
 
-- jdk 11 及以上
+- jdk 18
 - maven
 - npm
 - git
