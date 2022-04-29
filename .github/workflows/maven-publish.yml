@@ -15,6 +15,10 @@ jobs:
       contents: read
       packages: write
 
+    strategy:
+      matrix:
+        java-version: [ 11, 18 ]
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -29,10 +33,10 @@ jobs:
           cache: yarn
           cache-dependency-path: assets/package.json
 
-      - name: Set up JDK 18
+      - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v3
         with:
-          java-version: '18'
+          java-version: ${{ matrix.java-version }}
           distribution: 'temurin'
           cache: maven
 
@@ -54,5 +58,5 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.0.0
         with:
-          name: application-release
+          name: application-release-${{ matrix.java-version }}
           path: target/Link-*.jar
