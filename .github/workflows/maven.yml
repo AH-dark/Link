@@ -36,6 +36,8 @@ jobs:
         cache: maven
         
     - name: Build Frontend
+      env:
+        CI: false
       run: |
         cd assets/
         yarn install
