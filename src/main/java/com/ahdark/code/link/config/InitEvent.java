@@ -13,13 +13,7 @@ import java.util.Map;
 @Component
 @Slf4j
 public class InitEvent implements ApplicationRunner {
-    private final Gson gson = new Gson();
-    @Autowired
-    SiteConfigService siteConfigService;
-
     @Override
     public void run(ApplicationArguments args) {
-        Map<String, Object> siteConfigs = siteConfigService.get();
-        log.info("Get site config success: {}", gson.toJson(siteConfigs));
     }
 }
