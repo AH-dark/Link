@@ -4,6 +4,7 @@ import com.ahdark.code.link.pojo.User;
 import com.ahdark.code.link.service.UserService;
 import com.ahdark.code.link.utils.ApiResult;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
 import com.google.gson.Gson;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -132,7 +133,7 @@ public class UserController {
     }
 
     @PutMapping()
-    public JSONObject UpdateInfo() {
+    public JSONObject UpdateInfo(@RequestBody String body) {
         // Check
         String sessionId = session.getId();
         Object sessionAttribute = session.getAttribute(sessionId);
@@ -143,43 +144,33 @@ public class UserController {
         User currentUser = gson.fromJson(gson.toJsonTree(sessionAttribute), User.class);
 
         // Convert
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        Map<String, Object> paramData = new HashMap<>();
-        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
-            String key = entry.getKey();
-            String[] values = entry.getValue();
-            paramData.put(key, values[values.length - 1]);
-        }
+        User inputData = gson.fromJson(body, User.class);
 
-        log.info("Request params: {}", paramData);
+        log.info("Request data: {}", inputData);
 
         // Lock
-        if (paramData.get("id") != null && !Objects.equals(paramData.get("id"), currentUser.getId())) {
+        if (inputData.getId() != null && !Objects.equals(inputData.getId(), currentUser.getId())) {
             return new ApiResult<>(NO_PERMISSION).getJsonResult();
-        }
-
-        if (paramData.isEmpty()) {
-            return new ApiResult<>(PARAM_IS_BLANK).getJsonResult();
         }
 
         Integer userId = currentUser.getId();
 
         // Info can not change by user
         // password
-        if (paramData.get("password") != null && paramData.get("password") != currentUser.getPassword()) {
-            String changedPassword = String.valueOf(paramData.get("password"));
+        if (inputData.getPassword() != null && !Objects.equals(inputData.getPassword(), currentUser.getPassword()) && !Objects.equals(inputData.getPassword(), "")) {
+            String changedPassword = String.valueOf(inputData.getPassword());
             log.info("User {} password will be changed to '{}'", userId, changedPassword);
             currentUser.setPassword(DigestUtils.md5DigestAsHex(changedPassword.getBytes()).toUpperCase());
         }
         // name
-        if (paramData.get("name") != null && paramData.get("name") != currentUser.getName()) {
-            String changedName = String.valueOf(paramData.get("name"));
+        if (inputData.getName() != null && !Objects.equals(inputData.getName(), currentUser.getName())) {
+            String changedName = String.valueOf(inputData.getName());
             log.info("User (id: {}, email: {}) name will be changed to '{}'", userId, currentUser.getEmail(), changedName);
             currentUser.setName(changedName);
         }
-        // role
-        if (paramData.get("description") != null && paramData.get("description") != currentUser.getDescription()) {
-            String changedDescription = String.valueOf(paramData.get("description"));
+        // description
+        if (inputData.getDescription() != null && !Objects.equals(inputData.getDescription(), currentUser.getDescription())) {
+            String changedDescription = String.valueOf(inputData.getDescription());
             log.info("User (id: {}, email: {}) description will be changed to '{}'", userId, currentUser.getEmail(), changedDescription);
             currentUser.setDescription(changedDescription);
         }
