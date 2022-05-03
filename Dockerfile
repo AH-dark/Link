@@ -6,7 +6,6 @@ RUN npm run build
 FROM maven:3-openjdk-18 AS Builder
 COPY . .
 COPY --from=Frontend-Builder build src/main/resources/public
-RUN cp src/main/resources/application.example.properties src/main/resources/application.properties
 RUN mvn clean
 RUN mvn package
 
