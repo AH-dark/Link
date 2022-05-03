@@ -12,5 +12,5 @@ public class ShortLink {
     private String origin;
     private int userId;
     private int view;
-    private Timestamp create_time;
+    private Timestamp createTime;
 }

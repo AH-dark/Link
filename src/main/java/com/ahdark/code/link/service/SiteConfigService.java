@@ -1,7 +1,5 @@
 package com.ahdark.code.link.service;
 
-import com.ahdark.code.link.pojo.SiteConfig;
-
 import java.util.Map;
 
 public interface SiteConfigService {

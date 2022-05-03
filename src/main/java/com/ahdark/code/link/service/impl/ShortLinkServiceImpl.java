@@ -45,7 +45,7 @@ public class ShortLinkServiceImpl implements ShortLinkService {
         if (limit > 30 || limit < 1) {
             return null;
         }
-        LimitData limitData = new LimitData();
+        LimitData limitData = new LimitData<>();
         limitData.setLimit(limit);
         limitData.setOffset(offset);
         List<ShortLink> shortLinks = this.shortLinkMapper.getLatestShortLink(limitData);
@@ -60,7 +60,7 @@ public class ShortLinkServiceImpl implements ShortLinkService {
         if (limit > 30 || limit < 1) {
             return null;
         }
-        LimitData limitData = new LimitData();
+        LimitData limitData = new LimitData<>();
         limitData.setLimit(limit);
         limitData.setOffset(0);
         List<ShortLink> shortLinks = this.shortLinkMapper.getLatestShortLink(limitData);
@@ -71,6 +71,16 @@ public class ShortLinkServiceImpl implements ShortLinkService {
     }
 
     @Override
+    public Integer getNum() {
+        return this.getNum(null);
+    }
+
+    @Override
+    public Integer getNum(Integer userId) {
+        return this.shortLinkMapper.getNum(userId);
+    }
+
+    @Override
     public Boolean setShortLinks(ShortLink shortLinks) {
         return this.shortLinkMapper.setShortLinks(shortLinks);
     }
@@ -78,6 +88,13 @@ public class ShortLinkServiceImpl implements ShortLinkService {
     @Override
     public Boolean addView(ShortLink shortLink) {
         return this.shortLinkMapper.addView(shortLink);
+    }
+
+    @Override
+    public Boolean deleteShortLink(String key) {
+        ShortLink shortLink = new ShortLink();
+        shortLink.setKey(key);
+        return this.shortLinkMapper.deleteShortLink(shortLink);
     }
 
 }

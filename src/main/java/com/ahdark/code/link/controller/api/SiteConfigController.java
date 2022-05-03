@@ -1,6 +1,5 @@
 package com.ahdark.code.link.controller.api;
 
-import com.ahdark.code.link.pojo.SiteConfig;
 import com.ahdark.code.link.service.SiteConfigService;
 import com.ahdark.code.link.utils.ApiResult;
 import com.alibaba.fastjson.JSONObject;

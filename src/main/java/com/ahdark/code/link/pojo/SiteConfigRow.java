@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-public class SiteConfig {
+public class SiteConfigRow {
     private String name;
     private String value;
     private String type;

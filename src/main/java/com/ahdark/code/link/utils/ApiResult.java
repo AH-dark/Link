@@ -72,6 +72,10 @@ public class ApiResult<T> implements Serializable {
         this.Code = Integer.parseInt(code);
     }
 
+    public String getMessage() {
+        return this.Message;
+    }
+
     public void setMessage(String message) {
         this.Message = message;
     }

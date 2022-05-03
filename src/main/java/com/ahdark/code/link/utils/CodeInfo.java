@@ -35,7 +35,7 @@ public enum CodeInfo {
     USER_ACCOUNT_USE_BY_OTHERS(2009, "Account offline"),
 
     /* 数据错误 */
-    DATA_IS_EXIST(3001, "Data is exise"),
+    DATA_IS_EXIST(3001, "Data is exist"),
 
     /* 业务错误 */
     NO_PERMISSION(403, "Permission denied"),

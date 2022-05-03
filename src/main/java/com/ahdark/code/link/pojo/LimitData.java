@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-public class LimitData {
-    private int limit;
-    private int offset;
+public class LimitData<T> {
+    private Integer limit;
+    private Integer offset;
+    private Integer total;
+    private T data = null;
 }

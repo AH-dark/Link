@@ -18,6 +18,8 @@ public interface ShortLinkMapper {
 
     List<ShortLink> getLatestShortLink(LimitData limitData);
 
+    int getNum(Integer userId);
+
     /**
      * Set view ++
      *
@@ -31,4 +33,10 @@ public interface ShortLinkMapper {
      * @return 是否成功
      */
     boolean setShortLinks(ShortLink shortLink);
+
+    /**
+     * @param shortLink 参数，需要完整
+     * @return 是否成功
+     */
+    boolean deleteShortLink(ShortLink shortLink);
 }

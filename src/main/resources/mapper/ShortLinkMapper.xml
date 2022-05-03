@@ -22,8 +22,16 @@
             useCache="true">
         SELECT *
         FROM short_links
-        ORDER BY create_time DESC
+        ORDER BY createTime DESC
         LIMIT #{offset},#{limit}
+    </select>
+    <select id="getNum" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+        SELECT count(*) FROM short_links
+        <where>
+            <if test="userId != null and userId != 0">
+                `userId`=#{userId, jdbcType=INTEGER}
+            </if>
+        </where>
     </select>
     <update id="addView" parameterType="com.ahdark.code.link.pojo.ShortLink" flushCache="false">
         UPDATE short_links
@@ -40,4 +48,7 @@
                 #{origin},
                 #{userId})
     </insert>
+    <delete id="deleteShortLink" parameterType="com.ahdark.code.link.pojo.ShortLink" flushCache="true">
+        DELETE FROM short_links WHERE `key`=#{key}
+    </delete>
 </mapper>

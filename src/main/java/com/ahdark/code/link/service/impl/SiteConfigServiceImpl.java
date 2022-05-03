@@ -1,7 +1,7 @@
 package com.ahdark.code.link.service.impl;
 
 import com.ahdark.code.link.dao.ConfigMapper;
-import com.ahdark.code.link.pojo.SiteConfig;
+import com.ahdark.code.link.pojo.SiteConfigRow;
 import com.ahdark.code.link.service.SiteConfigService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +20,10 @@ public class SiteConfigServiceImpl implements SiteConfigService {
 
     @Override
     public Object get(String name) {
-        List<SiteConfig> siteConfigs = configMapper.get(name);
-        if (!siteConfigs.isEmpty()) {
-            String typeName = siteConfigs.get(0).getType();
-            String value = siteConfigs.get(0).getValue();
+        List<SiteConfigRow> siteConfigRows = configMapper.get(name);
+        if (!siteConfigRows.isEmpty()) {
+            String typeName = siteConfigRows.get(0).getType();
+            String value = siteConfigRows.get(0).getValue();
             switch (typeName) {
                 case "bool":
                 case "boolean":
@@ -48,30 +48,30 @@ public class SiteConfigServiceImpl implements SiteConfigService {
 
     @Override
     public Map<String, Object> get() {
-        List<SiteConfig> siteConfigs = configMapper.get();
+        List<SiteConfigRow> siteConfigRows = configMapper.get();
         Map<String, Object> map = new HashMap<>();
-        for (SiteConfig siteConfig : siteConfigs) {
-            String typeName = siteConfig.getType().toLowerCase();
+        for (SiteConfigRow siteConfigRow : siteConfigRows) {
+            String typeName = siteConfigRow.getType().toLowerCase();
             switch (typeName) {
                 case "bool":
                 case "boolean":
-                    map.put(siteConfig.getName(), Boolean.parseBoolean(siteConfig.getValue()));
+                    map.put(siteConfigRow.getName(), Boolean.parseBoolean(siteConfigRow.getValue()));
                     break;
                 case "number":
                 case "int":
                 case "integer":
-                    map.put(siteConfig.getName(), Integer.parseInt(siteConfig.getValue()));
+                    map.put(siteConfigRow.getName(), Integer.parseInt(siteConfigRow.getValue()));
                     break;
                 case "json":
                 case "obj":
                 case "object":
                 case "gson":
-                    map.put(siteConfig.getName(), gson.fromJson(siteConfig.getValue(), Object.class));
+                    map.put(siteConfigRow.getName(), gson.fromJson(siteConfigRow.getValue(), Object.class));
                     break;
                 case "str":
                 case "string":
                 default:
-                    map.put(siteConfig.getName(), siteConfig.getValue());
+                    map.put(siteConfigRow.getName(), siteConfigRow.getValue());
                     break;
             }
         }
@@ -80,9 +80,9 @@ public class SiteConfigServiceImpl implements SiteConfigService {
 
     @Override
     public Boolean set(String name, String value) {
-        SiteConfig siteConfig = new SiteConfig();
-        siteConfig.setName(name);
-        siteConfig.setValue(value);
-        return configMapper.set(siteConfig);
+        SiteConfigRow siteConfigRow = new SiteConfigRow();
+        siteConfigRow.setName(name);
+        siteConfigRow.setValue(value);
+        return configMapper.set(siteConfigRow);
     }
 }

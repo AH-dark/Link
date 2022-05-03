@@ -15,7 +15,13 @@ public interface ShortLinkService {
 
     List<ShortLink> getLatestShortLink(int limit);
 
+    Integer getNum();
+
+    Integer getNum(Integer userId);
+
     Boolean addView(ShortLink shortLink);
 
     Boolean setShortLinks(ShortLink shortLinks);
+
+    Boolean deleteShortLink(String key);
 }

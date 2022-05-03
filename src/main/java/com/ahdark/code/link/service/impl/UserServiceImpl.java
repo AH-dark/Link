@@ -1,6 +1,7 @@
 package com.ahdark.code.link.service.impl;
 
 import com.ahdark.code.link.dao.UserMapper;
+import com.ahdark.code.link.pojo.LimitData;
 import com.ahdark.code.link.pojo.User;
 import com.ahdark.code.link.service.UserService;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,19 @@ public class UserServiceImpl implements UserService {
         } else {
             return results.get(0); // ID is unique
         }
+    }
+
+    @Override
+    public List<User> getAllUser(int limit, int skip) {
+        LimitData<List<User>> limitData = new LimitData<>();
+        limitData.setLimit(limit);
+        limitData.setOffset(skip);
+        return this.userMapper.getAllUser(limitData);
+    }
+
+    @Override
+    public int getUserNum() {
+        return this.userMapper.getUserNum();
     }
 
     @Override
