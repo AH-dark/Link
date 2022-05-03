@@ -1,6 +1,5 @@
 FROM node:alpine AS Frontend-Builder
 COPY assets .
-RUN npm install -g yarn
 RUN yarn install
 RUN yarn build
 
