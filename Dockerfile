@@ -1,7 +1,8 @@
 FROM node:alpine AS Frontend-Builder
 COPY assets .
-RUN npm install
-RUN npm run build
+RUN npm install -g yarn
+RUN yarn install
+RUN yarn build
 
 FROM maven:3-openjdk-18 AS Builder
 COPY . .
