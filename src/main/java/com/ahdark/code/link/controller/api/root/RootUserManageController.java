@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Locale;
 
 import static com.ahdark.code.link.utils.CodeInfo.*;
 
@@ -110,7 +111,7 @@ public class RootUserManageController {
             return new ApiResult<>(PARAM_NOT_COMPLETE).getJsonResult();
         }
 
-        inputData.setPassword(DigestUtils.md5DigestAsHex(inputData.getPassword().getBytes(StandardCharsets.UTF_8)));
+        inputData.setPassword(DigestUtils.md5DigestAsHex(inputData.getPassword().getBytes(StandardCharsets.UTF_8)).toUpperCase(Locale.ROOT));
 
         // Update Database
         boolean isSuccess = this.userService.updateUserInfo(inputData);
@@ -128,7 +129,7 @@ public class RootUserManageController {
         user.setId(null);
         user.setCreateTime(null);
         user.setLoginTime(null);
-        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes(StandardCharsets.UTF_8)));
+        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes(StandardCharsets.UTF_8)).toUpperCase(Locale.ROOT));
 
         if (userService.getUserByEmail(user.getEmail()) != null) {
             return new ApiResult<>(DATA_IS_EXIST).getJsonResult();
