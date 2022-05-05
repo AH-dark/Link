@@ -17,6 +17,18 @@
             </if>
         </where>
     </select>
+    <select id="getNumByTime" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT count(*)
+        FROM users
+        <where>
+            <if test="start != null">
+                and `createTime` &gt;= #{start, jdbcType=TIMESTAMP}
+            </if>
+            <if test="end != null">
+                and `createTime` &lt;= #{end, jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
     <insert id="setUser" parameterType="com.ahdark.code.link.pojo.User" flushCache="true">
         INSERT INTO users
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -63,7 +75,7 @@
         ORDER BY id
         LIMIT #{offset},#{limit}
     </select>
-    <select id="getUserNum" resultType="java.lang.Integer" useCache="true">
+    <select id="getNum" resultType="java.lang.Integer" useCache="true">
         SELECT count(*)
         FROM users
     </select>

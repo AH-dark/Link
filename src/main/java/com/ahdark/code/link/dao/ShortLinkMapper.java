@@ -5,7 +5,9 @@ import com.ahdark.code.link.pojo.ShortLink;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
@@ -19,6 +21,8 @@ public interface ShortLinkMapper {
     List<ShortLink> getLatestShortLink(LimitData limitData);
 
     int getNum(Integer userId);
+
+    int getNumByTime(Map<String, Timestamp> timestampMap);
 
     /**
      * Set view ++

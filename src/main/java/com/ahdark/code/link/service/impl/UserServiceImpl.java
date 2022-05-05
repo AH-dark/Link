@@ -7,7 +7,10 @@ import com.ahdark.code.link.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -47,8 +50,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getUserNum() {
-        return this.userMapper.getUserNum();
+    public Integer getNum() {
+        return this.userMapper.getNum();
+    }
+
+    @Override
+    public Integer getNum(Timestamp start, Timestamp end) {
+        Map<String, Timestamp> timestampMap = new HashMap<>();
+        timestampMap.put("start", start);
+        timestampMap.put("end", end);
+        return this.userMapper.getNumByTime(timestampMap);
     }
 
     @Override

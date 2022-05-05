@@ -2,6 +2,7 @@ package com.ahdark.code.link.service;
 
 import com.ahdark.code.link.pojo.ShortLink;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface ShortLinkService {
@@ -18,6 +19,8 @@ public interface ShortLinkService {
     Integer getNum();
 
     Integer getNum(Integer userId);
+
+    Integer getNum(Timestamp start, Timestamp end);
 
     Boolean addView(ShortLink shortLink);
 

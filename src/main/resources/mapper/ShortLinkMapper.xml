@@ -33,6 +33,18 @@
             </if>
         </where>
     </select>
+    <select id="getNumByTime" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT count(*)
+        FROM short_links
+        <where>
+            <if test="start != null">
+                and `createTime` &gt;= #{start, jdbcType=TIMESTAMP}
+            </if>
+            <if test="end != null">
+                and `createTime` &lt;= #{end, jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
     <update id="addView" parameterType="com.ahdark.code.link.pojo.ShortLink" flushCache="false">
         UPDATE short_links
         <set>

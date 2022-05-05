@@ -71,7 +71,7 @@ public class RootUserManageController {
             @RequestParam(defaultValue = "1", required = false) Integer page
     ) {
         log.info("GET all user event.");
-        int userNum = this.userService.getUserNum();
+        int userNum = this.userService.getNum();
         if (Math.max(0, (page - 1)) * limit > userNum) {
             return new ApiResult<>(COMMON_FAIL).getJsonResult();
         }

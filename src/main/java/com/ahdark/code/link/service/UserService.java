@@ -2,6 +2,7 @@ package com.ahdark.code.link.service;
 
 import com.ahdark.code.link.pojo.User;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface UserService {
@@ -11,7 +12,9 @@ public interface UserService {
 
     List<User> getAllUser(int limit, int skip);
 
-    int getUserNum();
+    Integer getNum();
+
+    Integer getNum(Timestamp start, Timestamp end);
 
     boolean setUser(User user);
 

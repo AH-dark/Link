@@ -5,7 +5,9 @@ import com.ahdark.code.link.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
@@ -14,7 +16,8 @@ public interface UserMapper {
 
     List<User> getAllUser(LimitData limitData);
 
-    int getUserNum();
+    int getNum();
+    int getNumByTime(Map<String, Timestamp> timestampMap);
 
     int setUser(User user);
 

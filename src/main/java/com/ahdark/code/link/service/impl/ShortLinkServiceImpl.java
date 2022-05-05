@@ -7,7 +7,10 @@ import com.ahdark.code.link.service.ShortLinkService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ShortLinkServiceImpl implements ShortLinkService {
@@ -78,6 +81,14 @@ public class ShortLinkServiceImpl implements ShortLinkService {
     @Override
     public Integer getNum(Integer userId) {
         return this.shortLinkMapper.getNum(userId);
+    }
+
+    @Override
+    public Integer getNum(Timestamp start, Timestamp end) {
+        Map<String, Timestamp> timestampMap = new HashMap<>();
+        timestampMap.put("start", start);
+        timestampMap.put("end", end);
+        return this.shortLinkMapper.getNumByTime(timestampMap);
     }
 
     @Override
