@@ -42,8 +42,8 @@ public class RootLinkManageController {
             return new ApiResult<>(COMMON_FAIL).getJsonResult();
         }
 
-        List<ShortLink> users = this.shortLinkService.getLatestShortLink(limit, Math.max(0, (page - 1)) * limit);
-        if (users.isEmpty()) {
+        List<ShortLink> links = this.shortLinkService.getLatestShortLink(limit, Math.max(0, (page - 1)) * limit);
+        if (links == null || links.isEmpty()) {
             return new ApiResult<>(COMMON_FAIL).getJsonResult();
         }
 
@@ -51,7 +51,7 @@ public class RootLinkManageController {
         limitData.setLimit(limit);
         limitData.setOffset(Math.max(0, (page - 1)) * limit);
         limitData.setTotal(userNum);
-        limitData.setData(users);
+        limitData.setData(links);
 
         ApiResult<LimitData<List<ShortLink>>> result = new ApiResult<>(limitData);
 
