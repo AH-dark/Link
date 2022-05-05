@@ -1,25 +1,20 @@
 package com.ahdark.code.link.controller.api.root;
 
-import com.ahdark.code.link.pojo.SiteConfigRow;
 import com.ahdark.code.link.service.SiteConfigService;
 import com.ahdark.code.link.utils.ApiResult;
-import com.ahdark.code.link.utils.CodeInfo;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.ahdark.code.link.utils.CodeInfo.*;
 
 @RestController
 @RequestMapping(path = "/api/root/siteConfig")
@@ -35,21 +30,34 @@ public class RootSiteConfigController {
     @Autowired
     HttpSession session;
 
-    @PutMapping
-    public JSONObject Update(@RequestBody String body) {
-        SiteConfigRow[] siteConfigRows = gson.fromJson(body, SiteConfigRow[].class);
-        List<SiteConfigRow> notSuccessSiteConfigRows = new ArrayList<>();
-        for (SiteConfigRow siteConfigRow : siteConfigRows) {
-            boolean result = siteConfigService.set(siteConfigRow.getName(), siteConfigRow.getValue());
-            if (!result) {
-                notSuccessSiteConfigRows.add(siteConfigRow);
-            }
+    @GetMapping("")
+    public JSONObject Get() {
+        Map<String, Object> configs = siteConfigService.get();
+        return new ApiResult<>(configs).getJsonResult();
+    }
+
+    @GetMapping(value = "", params = {"name"})
+    public JSONObject Get(@RequestParam("name") String name) {
+        Object result = siteConfigService.get(name);
+        if (result == null) {
+            return new ApiResult<>(NO_DATA).getJsonResult();
         }
-        Map<String, List<SiteConfigRow>> map = new HashMap<>();
-        map.put("failed", notSuccessSiteConfigRows);
-        ApiResult<Object> apiResult = new ApiResult<>(notSuccessSiteConfigRows.isEmpty() ? CodeInfo.SUCCESS : CodeInfo.COMMON_FAIL);
-        apiResult.setData(map);
-        return apiResult.getJsonResult();
+        return new ApiResult<>(result).getJsonResult();
+    }
+
+    @PutMapping(value = "")
+    public JSONObject Update(@RequestBody String body) {
+        Map<String, Object> siteConfigMap = gson.fromJson(body, Map.class);
+        AtomicBoolean err = new AtomicBoolean(false);
+        siteConfigMap.forEach((key, obj) -> {
+            if (!siteConfigService.set(key, obj.toString())) {
+                err.set(true);
+            }
+        });
+
+        Map<String, Object> dataMap = siteConfigService.get();
+
+        return new ApiResult<>(err.get() ? COMMON_FAIL : SUCCESS, dataMap).getJsonResult();
     }
 
 }
