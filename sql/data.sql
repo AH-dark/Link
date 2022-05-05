@@ -41,4 +41,4 @@ create table users
     constraint users_id_uindex
         unique (id)
 )
-    comment '用户信息' auto_increment = 2;
+    comment '用户信息' auto_increment = 1;
