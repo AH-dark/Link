@@ -92,17 +92,32 @@ public class ShortLinkServiceImpl implements ShortLinkService {
     }
 
     @Override
-    public Boolean setShortLinks(ShortLink shortLinks) {
-        return this.shortLinkMapper.setShortLinks(shortLinks);
+    public Boolean setShortLinks(ShortLink shortLink) {
+        return shortLink != null && this.shortLinkMapper.setShortLink(shortLink);
     }
 
     @Override
-    public Boolean addView(ShortLink shortLink) {
+    public Boolean updateShortLink(ShortLink shortLink) {
+        return shortLink != null && this.shortLinkMapper.updateShortLink(shortLink);
+    }
+
+    @Override
+    public Boolean addView(String key) {
+        if (key == null) {
+            return false;
+        }
+
+        ShortLink shortLink = new ShortLink();
+        shortLink.setKey(key);
         return this.shortLinkMapper.addView(shortLink);
     }
 
     @Override
     public Boolean deleteShortLink(String key) {
+        if (key == null) {
+            return false;
+        }
+
         ShortLink shortLink = new ShortLink();
         shortLink.setKey(key);
         return this.shortLinkMapper.deleteShortLink(shortLink);

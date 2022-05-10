@@ -33,10 +33,18 @@ public interface ShortLinkMapper {
     boolean addView(ShortLink shortLink);
 
     /**
+     * Update information of short link, based on key
+     *
+     * @param shortLink 参数，需要 Key
+     * @return 是否成功
+     */
+    boolean updateShortLink(ShortLink shortLink);
+
+    /**
      * @param shortLink 参数，需要完整
      * @return 是否成功
      */
-    boolean setShortLinks(ShortLink shortLink);
+    boolean setShortLink(ShortLink shortLink);
 
     /**
      * @param shortLink 参数，需要完整

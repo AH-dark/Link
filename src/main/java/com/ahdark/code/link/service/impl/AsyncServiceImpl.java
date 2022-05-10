@@ -26,9 +26,7 @@ public class AsyncServiceImpl implements AsyncService {
     @Async
     @Override
     public void addLinkView(String key) {
-        ShortLink shortLink = new ShortLink();
-        shortLink.setKey(key);
-        Boolean status = shortLinkService.addView(shortLink);
+        Boolean status = shortLinkService.addView(key);
         if (status) {
             log.info(format("Success to update short link view data where key is %s.", key));
         } else {

@@ -22,7 +22,9 @@ public interface ShortLinkService {
 
     Integer getNum(Timestamp start, Timestamp end);
 
-    Boolean addView(ShortLink shortLink);
+    Boolean updateShortLink(ShortLink shortLink);
+
+    Boolean addView(String key);
 
     Boolean setShortLinks(ShortLink shortLinks);
 

@@ -54,6 +54,26 @@
             `key` = #{key}
         </where>
     </update>
+    <update id="updateShortLink" parameterType="com.ahdark.code.link.pojo.ShortLink" flushCache="true">
+        UPDATE short_links
+        <set>
+            <if test='origin!=null and origin!=""'>
+                `origin`=#{origin},
+            </if>
+            <if test='userId!=null'>
+                `userId`=#{userId},
+            </if>
+            <if test='view!=null and view>=0'>
+                `view`=#{view},
+            </if>
+            <if test='createTime!=null'>
+                `createTime`=#{createTime},
+            </if>
+        </set>
+        <where>
+            `key` = #{key}
+        </where>
+    </update>
     <insert id="setShortLinks" parameterType="com.ahdark.code.link.pojo.ShortLink" flushCache="true">
         INSERT INTO short_links (`key`, origin, userId)
         VALUES (#{key},
