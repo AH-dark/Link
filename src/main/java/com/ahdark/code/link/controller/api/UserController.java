@@ -114,6 +114,10 @@ public class UserController {
         log.info("GET user event, through ID.");
         log.info("ID: {}", id);
 
+        if (id == 0) {
+            return new ApiResult<>(USER_ACCOUNT_NOT_EXIST).getJsonResult();
+        }
+
         User user = this.userService.getUserById(id);
         if (user == null) {
             return new ApiResult<>(USER_ACCOUNT_NOT_EXIST).getJsonResult();

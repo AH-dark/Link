@@ -74,11 +74,11 @@
             `key` = #{key}
         </where>
     </update>
-    <insert id="setShortLinks" parameterType="com.ahdark.code.link.pojo.ShortLink" flushCache="true">
+    <insert id="setShortLink" parameterType="com.ahdark.code.link.pojo.ShortLink" flushCache="true">
         INSERT INTO short_links (`key`, origin, userId)
-        VALUES (#{key},
-                #{origin},
-                #{userId})
+        VALUES (#{key, jdbcType=VARCHAR},
+                #{origin, jdbcType=VARCHAR},
+                #{userId, jdbcType=INTEGER})
     </insert>
     <delete id="deleteShortLink" parameterType="com.ahdark.code.link.pojo.ShortLink" flushCache="true">
         DELETE FROM short_links WHERE `key`=#{key}
