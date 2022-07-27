@@ -37,7 +37,6 @@ jobs:
         with:
           clean: false
           submodules: 'true'
-          token: ${{ secrets.REPO_TOKEN }}
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
