@@ -17,19 +17,32 @@ jobs:
     strategy:
       matrix:
         java-version: [ 11, 18 ]
+        node-version: [ 16.x ]
 
     steps:
     - uses: actions/checkout@v3
       with:
         clean: false
         submodules: 'true'
-    
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v3.1.1
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2.2.2
       with:
-        node-version: 16.x
-        cache: yarn
+        version: 7
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'pnpm'
         cache-dependency-path: assets/package.json
+
+    - name: Install Dependencies
+      run: |
+        cd assets
+        pnpm install --no-frozen
+        pnpm run build
+        cd ..
     
     - name: Set up JDK ${{ matrix.java-version }}
       uses: actions/setup-java@v3
@@ -37,16 +50,6 @@ jobs:
         java-version: ${{ matrix.java-version }}
         distribution: 'temurin'
         cache: maven
-        
-    - name: Build Frontend
-      env:
-        CI: false
-      run: |
-        cd assets/
-        yarn install
-        yarn build
-        cd ../
-            
         
     - name: Build with Maven
       run: |

@@ -53,15 +53,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build Frontend
-        env:
-          CI: false
-        run: |
-          cd assets/
-          yarn install
-          yarn build
-          cd ../
-
       - name: Build with Maven
         run: |
           mv assets/build/* src/main/resources/public/
